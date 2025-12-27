@@ -104,7 +104,11 @@
                 class="cursor-pointer flex items-center text-gray-600 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white"
                 @click="toggle"
               >
-                <el-icon :size="20"><FullScreen /></el-icon>
+                <img
+                  :src="isFullscreen ? unFullScreenImg : fullScreenImg"
+                  class="w-4 h-4"
+                  alt="fullscreen"
+                />
               </span>
               <el-switch
                 v-model="isDark"
@@ -204,21 +208,25 @@ import {
 import { useRouter } from "vue-router";
 import { useI18n } from "vue-i18n";
 import { useDark, useFullscreen } from "@vueuse/core";
+import fullScreenImg from "@/assets/comments/full_screen.svg";
+import unFullScreenImg from "@/assets/comments/unfull_screen.svg";
 
 const router = useRouter();
 const route = useRoute();
 const { t, locale } = useI18n();
-const isDark = useDark()
-const { isFullscreen, toggle } = useFullscreen()
+const isDark = useDark();
+const { isFullscreen, toggle } = useFullscreen();
 
 // Get routes for menu
 const menuRoutes = computed(() => {
-  const layoutRoute = router.options.routes.find(r => r.path === '/')
+  const layoutRoute = router.options.routes.find((r) => r.path === "/");
   if (layoutRoute && layoutRoute.children) {
-    return layoutRoute.children
+    return layoutRoute.children;
   }
-  return []
-})
+  return [];
+});
+
+
 
 const sidebarCollapsed = ref(false);
 const visitedViews = ref([]);
