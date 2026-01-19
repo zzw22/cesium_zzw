@@ -239,24 +239,29 @@ const toggleLanguage = (lang) => {
 // 面包屑导航
 const breadcrumbs = computed(() => {
   const crumbs = [];
-  const { path, meta } = route;
-
-  // 添加系统管理父级
-  if (meta && meta.parent) {
+  
+  // 从根路由开始，获取完整的路由层级
+  const matched = route.matched;
+  
+  // 过滤掉没有meta.title的路由
+  const validRoutes = matched.filter(item => item.meta && item.meta.title);
+  
+  // 生成面包屑数组
+  validRoutes.forEach(item => {
     crumbs.push({
-      title: meta.parent,
-      path: "/system",
+      title: item.meta.title,
+      path: item.path
+    });
+  });
+  
+  // 确保始终包含首页
+  if (crumbs.length === 0 || crumbs[0].path !== '') {
+    crumbs.unshift({
+      title: 'menu.home',
+      path: ''
     });
   }
-
-  // 添加当前页面
-  if (meta && meta.title) {
-    crumbs.push({
-      title: meta.title,
-      path: path,
-    });
-  }
-
+  
   return crumbs;
 });
 
@@ -324,5 +329,37 @@ watch(
   display: flex;
   align-items: center;
   justify-content: flex-start;
+}
+
+/* 所有菜单项和子菜单标题背景色为白色 */
+:deep(.el-menu-item),
+:deep(.el-sub-menu__title),
+:deep(.el-sub-menu__title:hover),
+:deep(.el-menu-item:hover),
+:deep(.el-sub-menu.is-active > .el-sub-menu__title),
+:deep(.el-menu-item.is-active) {
+  background-color: white !important;
+}
+
+.dark :deep(.el-menu-item),
+.dark :deep(.el-sub-menu__title),
+.dark :deep(.el-sub-menu__title:hover),
+.dark :deep(.el-menu-item:hover),
+.dark :deep(.el-sub-menu.is-active > .el-sub-menu__title),
+.dark :deep(.el-menu-item.is-active) {
+  background-color: #1e293b !important;
+}
+
+/* 只有子菜单下的菜单项使用浅色背景 */
+:deep(.el-sub-menu .el-menu-item),
+:deep(.el-sub-menu .el-menu-item:hover),
+:deep(.el-sub-menu .el-menu-item.is-active) {
+  background-color: #00000005 !important;
+}
+
+.dark :deep(.el-sub-menu .el-menu-item),
+.dark :deep(.el-sub-menu .el-menu-item:hover),
+.dark :deep(.el-sub-menu .el-menu-item.is-active) {
+  background-color: rgb(0, 12, 23) !important;
 }
 </style>
