@@ -88,7 +88,6 @@
       <div
         class="relative flex flex-col transition-all duration-300 ease-in-out flex-1 min-w-0"
       >
-        <CesiumComponent class="absolute inset-0 z-0" />
         <header
           class="relative z-10 bg-white dark:bg-gray-800 flex flex-col px-4 transition-colors duration-300"
         >
@@ -195,6 +194,7 @@
         <main
           class="relative z-10 flex-1 bg-transparent w-full transition-colors duration-300 pointer-events-none overflow-hidden"
         >
+        <CesiumComponent class="absolute inset-0 z-0 pointer-events-auto" />
           <router-view v-slot="{ Component }">
             <component
               :is="Component"

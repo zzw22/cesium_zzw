@@ -6,19 +6,56 @@ import { useCesiumStore } from '@/store/cesiumStore';
 const cesiumContainer = ref(null);
 const cesiumStore = useCesiumStore();
 let viewer = null;
+const props = defineProps({
+  // 隐藏动画控件
+  animation: {
+    type: Boolean,
+    default: false
+  },
+  // 隐藏时间轴控件
+  timeline: {
+    type: Boolean,
+    default: false
+  },
+  // 隐藏信息框
+  infoBox: {
+    type: Boolean,
+    default: false
+  },
+// 隐藏地理编码搜索框
+  geocoder: {
+    type: Boolean,
+    default: false
+  },
+
+  homeButton: {
+    type: Boolean,
+    default: false
+  },
+  // 隐藏首页按钮
+  sceneModePicker: {
+    type: Boolean,
+    default: false
+  },
+  // 隐藏图层选择器
+  baseLayerPicker: {
+    type: Boolean,
+    default: false
+  },
+  // 隐藏导航帮助按钮
+  navigationHelpButton: {
+    type: Boolean,
+    default: false
+  }
+})
 
 onMounted(() => {
   if (!cesiumContainer.value) return;
   
   viewer = new Cesium.Viewer(cesiumContainer.value, {
-    animation: false, // 隐藏动画控件
-    timeline: false, // 隐藏时间轴控件
-    infoBox: false, // 隐藏信息框
-    geocoder: false, // 隐藏地理编码搜索框
-    homeButton: false, // 隐藏首页按钮
-    sceneModePicker: false, // 隐藏场景模式选择器
-    baseLayerPicker: false, // 隐藏图层选择器
-    navigationHelpButton: false, // 隐藏导航帮助按钮
+    ...props,
+    timeline: true,
+    animation: true,
   });
   
   // 隐藏版权信息
@@ -26,13 +63,14 @@ onMounted(() => {
   
   // 将 viewer 实例存入 Store
   cesiumStore.setViewer(viewer);
+  // 初始化控件可见性 (默认隐藏)
+  cesiumStore._updateWidgetVisibility();
 }) 
 
 onUnmounted(() => {
   if (viewer) {
     viewer.destroy();
     viewer = null;
-    cesiumStore.setViewer(null);
   }
 });
 </script>

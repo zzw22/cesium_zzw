@@ -29,7 +29,9 @@ const messages = {
       menu: 'Menu Management',
       project: 'Project Management',
       analysis: 'Data Analysis',
-      cesium: 'Cesium'
+      cesium: 'Cesium',
+      base: 'Basic Examples',
+      baseEntities: 'Entities'
     },
     login: {
       title: 'Vue3 Admin',
@@ -80,7 +82,13 @@ const messages = {
       menu: '菜单管理',
       project: '项目管理',
       analysis: '数据分析',
-      cesium: 'Cesium'
+      cesium: 'Cesium',
+      base: '基础实例',
+      baseEntities: '实体加载',
+      basePosition: '位置获取',
+      baseFly: '相机飞行',
+      baseSport: '运动模拟',
+      baseTip: '提示信息',
     },
     login: {
       title: 'Vue3 Admin',

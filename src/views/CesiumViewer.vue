@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-white h-20">1111</div>
+  <div class="bg-white h-20"></div>
 </template>
 
 <script setup>

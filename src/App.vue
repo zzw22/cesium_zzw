@@ -10,7 +10,6 @@
 
 <template>
   <div class="relative w-full h-full">
-    
     <router-view class="relative z-10" />
   </div>
 </template>

@@ -4,6 +4,8 @@ import { markRaw } from 'vue';
 export const useCesiumStore = defineStore('cesium', {
   state: () => ({
     viewer: null,
+    isTimelineVisible: false, // 时间轴显示状态
+    isAnimationVisible: false, // 动画控件显示状态
   }),
   actions: {
     setViewer(viewer) {
@@ -15,12 +17,40 @@ export const useCesiumStore = defineStore('cesium', {
     getViewer() {
       return this.viewer;
     },
+    setTimelineVisible(visible) {
+      this.isTimelineVisible = visible;
+      this._updateWidgetVisibility();
+    },
+    setAnimationVisible(visible) {
+      this.isAnimationVisible = visible;
+      this._updateWidgetVisibility();
+    },
+    _updateWidgetVisibility() {
+      if (!this.viewer) return;
+      const viewer = this.viewer;
+      
+      // 控制时间轴
+      const timelineContainer = viewer.timeline?.container;
+      if (timelineContainer) {
+        timelineContainer.style.display = this.isTimelineVisible ? 'block' : 'none';
+      }
+
+      // 控制动画控件
+      const animationContainer = viewer.animation?.container;
+      if (animationContainer) {
+        animationContainer.style.display = this.isAnimationVisible ? 'block' : 'none';
+      }
+      
+      // 调整底部工具栏布局（如果有）
+      viewer.forceResize();
+    },
     /**
      * 重置地图状态：
      * 1. 清除所有实体 (Entities)
      * 2. 清除所有数据源 (DataSources)
      * 3. 清除所有图元 (Primitives, 不包含默认的Globe等)
      * 4. 视角复位
+     * 5. 重置 UI 控件状态 (关闭时间轴等)
      */
     resetViewer() {
       if (!this.viewer) return;
@@ -40,6 +70,10 @@ export const useCesiumStore = defineStore('cesium', {
 
       // 4. 视角复位
       viewer.camera.flyHome(1.5); // 1.5秒动画
+
+      // 5. 重置 UI 状态
+      this.setTimelineVisible(false);
+      this.setAnimationVisible(false);
     },
   },
 });
