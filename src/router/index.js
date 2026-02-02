@@ -9,11 +9,8 @@ import { createRouter, createWebHistory } from 'vue-router'
 import Layout from '../layout/index.vue'
 import Login from '../views/Login.vue'
 import Home from '../views/Home.vue'
-import UserManagement from '../views/UserManagement.vue'
-import RoleManagement from '../views/RoleManagement.vue'
-import MenuManagement from '../views/MenuManagement.vue'
-import ProjectManagement from '../views/ProjectManagement.vue'
-import DataAnalysis from '../views/DataAnalysis.vue'
+import CesiumViewer from '../views/CesiumViewer.vue'
+
 
 const routes = [
   {
@@ -32,26 +29,11 @@ const routes = [
         component: Home, 
         meta: { title: 'menu.home', icon: 'House' } 
       },
-      {
-        path: '/system',
-        meta: { title: 'menu.system', icon: 'Setting' },
-        children: [
-          { path: '/user-management', name: 'UserManagement', component: UserManagement, meta: { title: 'menu.user' } },
-          { path: '/role-management', name: 'RoleManagement', component: RoleManagement, meta: { title: 'menu.role' } },
-          { path: '/menu-management', name: 'MenuManagement', component: MenuManagement, meta: { title: 'menu.menu' } }
-        ]
-      },
       { 
-        path: '/project-management', 
-        name: 'ProjectManagement', 
-        component: ProjectManagement, 
-        meta: { title: 'menu.project', icon: 'Document' } 
-      },
-      { 
-        path: '/data-analysis', 
-        name: 'DataAnalysis', 
-        component: DataAnalysis, 
-        meta: { title: 'menu.analysis', icon: 'DataBoard' } 
+        path: '/cesium', 
+        name: 'CesiumViewer', 
+        component: CesiumViewer, 
+        meta: { title: 'menu.cesium', icon: 'DataBoard' } 
       }
     ]
   }

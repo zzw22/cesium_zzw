@@ -18,7 +18,8 @@ const messages = {
       username: 'Username',
       password: 'Password',
       captcha: 'Captcha',
-      refresh: 'Refresh'
+      refresh: 'Refresh',
+      cesium: 'Cesium'
     },
     menu: {
       home: 'Home',
@@ -27,7 +28,8 @@ const messages = {
       role: 'Role Management',
       menu: 'Menu Management',
       project: 'Project Management',
-      analysis: 'Data Analysis'
+      analysis: 'Data Analysis',
+      cesium: 'Cesium'
     },
     login: {
       title: 'Vue3 Admin',
@@ -67,7 +69,8 @@ const messages = {
       username: '用户名',
       password: '密码',
       captcha: '验证码',
-      refresh: '刷新'
+      refresh: '刷新',
+      cesium: 'Cesium'
     },
     menu: {
       home: '首页',
@@ -76,7 +79,8 @@ const messages = {
       role: '角色管理',
       menu: '菜单管理',
       project: '项目管理',
-      analysis: '数据分析'
+      analysis: '数据分析',
+      cesium: 'Cesium'
     },
     login: {
       title: 'Vue3 Admin',

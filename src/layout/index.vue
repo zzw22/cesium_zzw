@@ -1,6 +1,13 @@
 <!--
  * @Title: 
  * @Author: zhangzhiwei
+ * @Date: 2026-02-02 16:48:30
+ * @FilePath: \src\layout\index.vue
+ * @Description: 
+-->
+<!--
+ * @Title: 
+ * @Author: zhangzhiwei
  * @Date: 2025-12-26 21:34:21
  * @FilePath: \src\layout\index.vue
  * @Description: 
@@ -42,41 +49,48 @@
             </h1>
           </header>
           <div class="flex-1 overflow-y-auto">
-            <el-menu-item index="/">
-              <el-icon><House /></el-icon>
-              <span v-show="!sidebarCollapsed">{{ t("menu.home") }}</span>
-            </el-menu-item>
-            <el-sub-menu index="2">
-              <template #title>
-                <el-icon><Setting /></el-icon>
-                <span v-show="!sidebarCollapsed">{{ t("menu.system") }}</span>
-              </template>
-              <el-menu-item index="/user-management">{{
-                t("menu.user")
-              }}</el-menu-item>
-              <el-menu-item index="/role-management">{{
-                t("menu.role")
-              }}</el-menu-item>
-              <el-menu-item index="/menu-management">{{
-                t("menu.menu")
-              }}</el-menu-item>
-            </el-sub-menu>
-            <el-menu-item index="/project-management">
-              <el-icon><Document /></el-icon>
-              <span v-show="!sidebarCollapsed">{{ t("menu.project") }}</span>
-            </el-menu-item>
-            <el-menu-item index="/data-analysis">
-              <el-icon><DataBoard /></el-icon>
-              <span v-show="!sidebarCollapsed">{{ t("menu.analysis") }}</span>
-            </el-menu-item>
+            <template v-for="item in menuRoutes" :key="item.path">
+              <!-- Check if the item has children -->
+              <el-sub-menu
+                v-if="item.children && item.children.length > 0"
+                :index="item.path"
+              >
+                <template #title>
+                  <el-icon v-if="item.meta && item.meta.icon">
+                    <component :is="item.meta.icon" />
+                  </el-icon>
+                  <span v-show="!sidebarCollapsed">{{
+                    t(item.meta.title)
+                  }}</span>
+                </template>
+                <el-menu-item
+                  v-for="child in item.children"
+                  :key="child.path"
+                  :index="child.path"
+                >
+                  <span v-show="!sidebarCollapsed">{{
+                    t(child.meta.title)
+                  }}</span>
+                </el-menu-item>
+              </el-sub-menu>
+
+              <!-- If no children, render as a regular menu item -->
+              <el-menu-item v-else :index="resolvePath(item.path)">
+                <el-icon v-if="item.meta && item.meta.icon">
+                  <component :is="item.meta.icon" />
+                </el-icon>
+                <span v-show="!sidebarCollapsed">{{ t(item.meta.title) }}</span>
+              </el-menu-item>
+            </template>
           </div>
         </el-menu>
       </aside>
       <div
-        class="flex flex-col transition-all duration-300 ease-in-out flex-1 min-w-0"
+        class="relative flex flex-col transition-all duration-300 ease-in-out flex-1 min-w-0"
       >
+        <CesiumComponent class="absolute inset-0 z-0" />
         <header
-          class="bg-white dark:bg-gray-800 flex flex-col px-4 transition-colors duration-300"
+          class="relative z-10 bg-white dark:bg-gray-800 flex flex-col px-4 transition-colors duration-300"
         >
           <!-- 面包屑导航 -->
           <div
@@ -179,9 +193,14 @@
         </header>
         <!-- Content Area -->
         <main
-          class="flex-1 overflow-auto bg-gray-50 dark:bg-gray-900 p-6 w-full transition-colors duration-300"
+          class="relative z-10 flex-1 bg-transparent w-full transition-colors duration-300 pointer-events-none overflow-hidden"
         >
-          <router-view />
+          <router-view v-slot="{ Component }">
+            <component
+              :is="Component"
+              class="pointer-events-auto w-full h-full overflow-y-auto"
+            />
+          </router-view>
         </main>
       </div>
     </div>
@@ -190,32 +209,27 @@
 
 <script setup>
 import { ref, computed, watch } from "vue";
-import { useRoute } from "vue-router";
-import {
-  User,
-  House,
-  Setting,
-  Document,
-  DataBoard,
-  Menu,
-  Fold,
-  Expand,
-  ArrowDown,
-  Moon,
-  Sunny,
-  FullScreen,
-} from "@element-plus/icons-vue";
-import { useRouter } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
+import { Moon, Sunny } from "@element-plus/icons-vue";
 import { useI18n } from "vue-i18n";
-import { useDark, useFullscreen } from "@vueuse/core";
+import CesiumComponent from "@/components/cesiumCom/index.vue";
+
+import { useFullscreen } from "@vueuse/core";
+import { useTheme } from "@/hooks/useTheme";
 import fullScreenImg from "@/assets/comments/full_screen.svg";
 import unFullScreenImg from "@/assets/comments/unfull_screen.svg";
 
 const router = useRouter();
 const route = useRoute();
 const { t, locale } = useI18n();
-const isDark = useDark();
+const { isDark } = useTheme();
 const { isFullscreen, toggle } = useFullscreen();
+
+// Helper to resolve path for menu index
+const resolvePath = (routePath) => {
+  if (routePath === "") return "/";
+  return routePath;
+};
 
 // Get routes for menu
 const menuRoutes = computed(() => {
@@ -225,8 +239,6 @@ const menuRoutes = computed(() => {
   }
   return [];
 });
-
-
 
 const sidebarCollapsed = ref(false);
 const visitedViews = ref([]);
@@ -239,29 +251,29 @@ const toggleLanguage = (lang) => {
 // 面包屑导航
 const breadcrumbs = computed(() => {
   const crumbs = [];
-  
+
   // 从根路由开始，获取完整的路由层级
   const matched = route.matched;
-  
+
   // 过滤掉没有meta.title的路由
-  const validRoutes = matched.filter(item => item.meta && item.meta.title);
-  
+  const validRoutes = matched.filter((item) => item.meta && item.meta.title);
+
   // 生成面包屑数组
-  validRoutes.forEach(item => {
+  validRoutes.forEach((item) => {
     crumbs.push({
       title: item.meta.title,
-      path: item.path
+      path: item.path,
     });
   });
-  
+
   // 确保始终包含首页
-  if (crumbs.length === 0 || crumbs[0].path !== '') {
+  if (crumbs.length === 0 || crumbs[0].path !== "") {
     crumbs.unshift({
-      title: 'menu.home',
-      path: ''
+      title: "menu.home",
+      path: "",
     });
   }
-  
+
   return crumbs;
 });
 
@@ -283,7 +295,7 @@ const addVisitedView = () => {
 // 关闭标签页
 const closeTag = (tag) => {
   visitedViews.value = visitedViews.value.filter(
-    (view) => view.path !== tag.path
+    (view) => view.path !== tag.path,
   );
   if (isActive(tag)) {
     const latestView = visitedViews.value.slice(-1)[0];
@@ -316,7 +328,7 @@ watch(
   () => {
     addVisitedView();
   },
-  { immediate: true }
+  { immediate: true },
 );
 </script>
 
@@ -329,37 +341,5 @@ watch(
   display: flex;
   align-items: center;
   justify-content: flex-start;
-}
-
-/* 所有菜单项和子菜单标题背景色为白色 */
-:deep(.el-menu-item),
-:deep(.el-sub-menu__title),
-:deep(.el-sub-menu__title:hover),
-:deep(.el-menu-item:hover),
-:deep(.el-sub-menu.is-active > .el-sub-menu__title),
-:deep(.el-menu-item.is-active) {
-  background-color: white !important;
-}
-
-.dark :deep(.el-menu-item),
-.dark :deep(.el-sub-menu__title),
-.dark :deep(.el-sub-menu__title:hover),
-.dark :deep(.el-menu-item:hover),
-.dark :deep(.el-sub-menu.is-active > .el-sub-menu__title),
-.dark :deep(.el-menu-item.is-active) {
-  background-color: #1e293b !important;
-}
-
-/* 只有子菜单下的菜单项使用浅色背景 */
-:deep(.el-sub-menu .el-menu-item),
-:deep(.el-sub-menu .el-menu-item:hover),
-:deep(.el-sub-menu .el-menu-item.is-active) {
-  background-color: #00000005 !important;
-}
-
-.dark :deep(.el-sub-menu .el-menu-item),
-.dark :deep(.el-sub-menu .el-menu-item:hover),
-.dark :deep(.el-sub-menu .el-menu-item.is-active) {
-  background-color: rgb(0, 12, 23) !important;
 }
 </style>
