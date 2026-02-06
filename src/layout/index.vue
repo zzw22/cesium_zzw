@@ -198,7 +198,7 @@
           <router-view v-slot="{ Component }">
             <component
               :is="Component"
-              class="pointer-events-auto w-full h-full overflow-y-auto"
+              class="pointer-events-auto"
             />
           </router-view>
         </main>
