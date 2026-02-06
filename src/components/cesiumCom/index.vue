@@ -1,3 +1,10 @@
+<!--
+ * @Title: 
+ * @Author: zhangzhiwei
+ * @Date: 2026-02-02 17:22:35
+ * @FilePath: \src\components\cesiumCom\index.vue
+ * @Description: 封装cesium组件
+-->
 <script setup>
 import * as Cesium from 'cesium';
 import { onMounted, ref, onUnmounted } from 'vue';

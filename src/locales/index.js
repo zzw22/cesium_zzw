@@ -43,6 +43,13 @@ const messages = {
       elementEvents: 'Events',
       elementSVG: 'SVG',
       elementGIF: 'GIF',
+      particle: 'Particle Effects',
+      particleExamples: 'Examples',
+
+      '3dtiles': '3D Tiles',
+      basic3dtiles: 'Basic 3D Tiles',
+      texture3dtiles: 'Texture 3D Tiles',
+      circle3dtiles: 'Circle 3D Tiles',
     },
     login: {
       title: 'Vue3 Admin',
@@ -129,7 +136,21 @@ const messages = {
       elementEvents: '响应事件',
       elementSVG: 'SVG图像',
       elementGIF: 'GIF动画',
+      elementClustering: '实体聚集',
+      elementCZML: 'CZML加载',
+      
+      particle: '粒子特效',
+      particleExamples: '综合示例',
 
+      models: '模型实例',
+      modelLoad: '加载模型',
+      modelPrimitive: 'Primitive模型',
+      modelPrimitiveMassive: '大量模型',
+      modelInterpolation: '差值运动',
+      modelInfo: '模型信息',
+      modelWindTurbine: '风力发电机',
+      '3dtiles': '3dtiles',
+      texture3dtiles: '3D Tiles贴图',
     },
     login: {
       title: 'Vue3 Admin',
