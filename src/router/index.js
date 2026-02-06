@@ -16,9 +16,6 @@ import BaseFly from "../views/base/fly.vue";
 import BaseSport from "../views/base/sport.vue";
 import BaseTip from "../views/base/tip.vue";
 
-
-
-
 const routes = [
   {
     path: "/login",
@@ -114,7 +111,6 @@ const routes = [
             component: () => import("../views/base/flyCircle.vue"),
             meta: { title: "menu.baseFlyCircle", icon: "DataBoard" },
           },
-
         ],
       },
       {
@@ -256,6 +252,90 @@ const routes = [
             name: "ElementGIF",
             component: () => import("../views/elements/gif.vue"),
             meta: { title: "menu.elementGIF", icon: "DataBoard" },
+          },
+          {
+            path: "/clustering",
+            name: "ElementClustering",
+            component: () => import("../views/elements/clustering.vue"),
+            meta: { title: "menu.elementClustering", icon: "DataBoard" },
+          },
+          {
+            path: "/czml",
+            name: "ElementCZML",
+            component: () => import("../views/elements/czml.vue"),
+            meta: { title: "menu.elementCZML", icon: "DataBoard" },
+          },
+        ],
+      },
+      {
+        path: "/particle",
+        name: "Particle",
+        meta: { title: "menu.particle", icon: "DataBoard" },
+        children: [
+          {
+            path: "/particleExamples",
+            name: "ParticleExamples",
+            component: () =>
+              import("../views/particleEffect/particleExamples.vue"),
+            meta: { title: "menu.particleExamples", icon: "DataBoard" },
+          },
+        ],
+      },
+      {
+        path: "/models",
+        name: "Models",
+        component: RouterView,
+        meta: { title: "menu.models", icon: "DataBoard" },
+        children: [
+          {
+            path: "/loadModel",
+            name: "ModelLoad",
+            component: () => import("../views/models/loadModel.vue"),
+            meta: { title: "menu.modelLoad", icon: "DataBoard" },
+          },
+          {
+            path: "/primitiveModel",
+            name: "ModelPrimitive",
+            component: () => import("../views/models/primitiveModel.vue"),
+            meta: { title: "menu.modelPrimitive", icon: "DataBoard" },
+          },
+          {
+            path: "/primitiveMassive",
+            name: "ModelPrimitiveMassive",
+            component: () => import("../views/models/primitiveMassive.vue"),
+            meta: { title: "menu.modelPrimitiveMassive", icon: "DataBoard" },
+          },
+          {
+            path: "/interpolation",
+            name: "ModelInterpolation",
+            component: () => import("../views/models/interpolation.vue"),
+            meta: { title: "menu.modelInterpolation", icon: "DataBoard" },
+          },
+          {
+            path: "/info",
+            name: "ModelInfo",
+            component: () => import("../views/models/modelInfo.vue"),
+            meta: { title: "menu.modelInfo", icon: "DataBoard" },
+          },
+          {
+            path: "/windTurbine",
+            name: "ModelWindTurbine",
+            component: () => import("../views/models/windTurbine.vue"),
+            meta: { title: "menu.modelWindTurbine", icon: "DataBoard" },
+          },
+        ],
+      },
+      {
+        path: "/3dtiles",
+        name: "3DTiles",
+        component: RouterView,
+        meta: { title: "menu.3dtiles", icon: "DataBoard" },
+        children: [
+          {
+            path: "/texture",
+            name: "Texture3DTiles",
+            component: () => import("../views/3dtiles/texture3dtiles.vue"),
+            meta: { title: "menu.texture3dtiles", icon: "DataBoard" },
           },
         ],
       },
