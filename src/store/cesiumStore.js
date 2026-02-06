@@ -1,3 +1,10 @@
+/*
+ * @Title: 
+ * @Author: zhangzhiwei
+ * @Date: 2026-02-02 17:54:18
+ * @FilePath: \src\store\cesiumStore.js
+ * @Description: 
+ */
 import { defineStore } from 'pinia';
 import { markRaw } from 'vue';
 
@@ -54,26 +61,40 @@ export const useCesiumStore = defineStore('cesium', {
      */
     resetViewer() {
       if (!this.viewer) return;
-
       const viewer = this.viewer;
+      if (viewer.isDestroyed()) {
+        console.warn('Viewer is already destroyed, skipping reset.');
+        this.viewer = null;
+        return;
+      }
+      try {
+        // 1. 清除实体
+        if (!viewer.entities.isDestroyed()) {
+           viewer.entities.removeAll();
+        }
+        
+        // 2. 清除数据源
+        if (!viewer.dataSources.isDestroyed()) {
+           viewer.dataSources.removeAll();
+        }
+        
+        // 3. 清除图元
+        // 增加额外检查，因为 primitives 集合本身也可能被销毁
+        if (viewer.scene && !viewer.scene.isDestroyed() && viewer.scene.primitives && !viewer.scene.primitives.isDestroyed()) {
+           viewer.scene.primitives.removeAll();
+        }
 
-      // 1. 清除实体
-      viewer.entities.removeAll();
-
-      // 2. 清除数据源
-      viewer.dataSources.removeAll();
-
-      // 3. 清除图元 (注意：这将清除所有primitives，包括3D Tileset)
-      // 如果有系统级图元需要保留，建议使用 collection 操作而不是 removeAll
-      // 这里假设 reset 是完全重置
-      viewer.scene.primitives.removeAll();
-
-      // 4. 视角复位
-      viewer.camera.flyHome(1.5); // 1.5秒动画
-
-      // 5. 重置 UI 状态
-      this.setTimelineVisible(false);
-      this.setAnimationVisible(false);
+        // 4. 视角复位
+        if (!viewer.camera.isDestroyed()) {
+           viewer.camera.flyHome(1.5);
+        }
+        
+        // 5. 重置 UI 状态
+        this.setTimelineVisible(false);
+        this.setAnimationVisible(false);
+      } catch (error) {
+        console.warn('Error during resetViewer:', error);
+      }
     },
   },
 });

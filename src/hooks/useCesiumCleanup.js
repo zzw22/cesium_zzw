@@ -19,8 +19,12 @@ export function useCesiumCleanup(beforeReset) {
 
     // 2. 重置地图状态
     const store = useCesiumStore();
-    if (store.viewer) {
-      store.resetViewer();
+    if (store.viewer && !store.viewer.isDestroyed()) {
+      try {
+        store.resetViewer();
+      } catch (error) {
+        console.warn('Viewer reset encountered an error (likely already destroyed):', error);
+      }
     }
   });
 }

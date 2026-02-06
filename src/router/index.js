@@ -18,6 +18,7 @@ import BaseTip from "../views/base/tip.vue";
 
 
 
+
 const routes = [
   {
     path: "/login",
@@ -76,6 +77,111 @@ const routes = [
             name: "BaseTip",
             component: BaseTip,
             meta: { title: "menu.baseTip", icon: "DataBoard" },
+          },
+          {
+            path: "/mask",
+            name: "BaseMask",
+            component: () => import("../views/base/mask.vue"),
+            meta: { title: "menu.baseMask", icon: "DataBoard" },
+          },
+          {
+            path: "/loadShp",
+            name: "BaseLoadShp",
+            component: () => import("../views/base/loadShp.vue"),
+            meta: { title: "menu.baseLoadShp", icon: "DataBoard" },
+          },
+          {
+            path: "/loadMVT",
+            name: "BaseLoadMVT",
+            component: () => import("../views/base/loadMVT.vue"),
+            meta: { title: "menu.baseLoadMVT", icon: "DataBoard" },
+          },
+          {
+            path: "/zoomControl",
+            name: "BaseZoomControl",
+            component: () => import("../views/base/zoomControl.vue"),
+            meta: { title: "menu.baseZoomControl", icon: "DataBoard" },
+          },
+          {
+            path: "/transparent",
+            name: "BaseTransparent",
+            component: () => import("../views/base/transparent.vue"),
+            meta: { title: "menu.baseTransparent", icon: "DataBoard" },
+          },
+          {
+            path: "/flyCircle",
+            name: "BaseFlyCircle",
+            component: () => import("../views/base/flyCircle.vue"),
+            meta: { title: "menu.baseFlyCircle", icon: "DataBoard" },
+          },
+
+        ],
+      },
+      {
+        path: "/layers",
+        name: "Layers",
+        component: RouterView,
+        meta: { title: "menu.baseLayers", icon: "DataBoard" },
+        children: [
+          {
+            path: "/single-image",
+            name: "LayerSingleImage",
+            component: () => import("../views/layers/singleImage.vue"),
+            meta: { title: "menu.layersPicture", icon: "Picture" },
+          },
+          {
+            path: "/xyz",
+            name: "LayerXYZ",
+            component: () => import("../views/layers/xyz.vue"),
+            meta: { title: "menu.layersXYZ", icon: "DataBoard" },
+          },
+          {
+            path: "/tms",
+            name: "LayerTMS",
+            component: () => import("../views/layers/tms.vue"),
+            meta: { title: "menu.layersTMS", icon: "DataBoard" },
+          },
+          {
+            path: "/wms",
+            name: "LayerWMS",
+            component: () => import("../views/layers/wms.vue"),
+            meta: { title: "menu.layersWMS", icon: "DataBoard" },
+          },
+          {
+            path: "/wmts",
+            name: "LayerWMTS",
+            component: () => import("../views/layers/wmts.vue"),
+            meta: { title: "menu.layersWMTS", icon: "DataBoard" },
+          },
+          {
+            path: "/tdt",
+            name: "LayerTDT",
+            component: () => import("../views/layers/tdt.vue"),
+            meta: { title: "menu.layersTDT", icon: "DataBoard" },
+          },
+          {
+            path: "/cgcs4490",
+            name: "Layer4490",
+            component: () => import("../views/layers/epsg4490.vue"),
+            meta: { title: "menu.layers4490", icon: "DataBoard" },
+          },
+          {
+            path: "/amap",
+            name: "LayerAmap",
+            component: () => import("../views/layers/addAmap.vue"),
+            meta: { title: "menu.layersAmap", icon: "DataBoard" },
+          },
+          {
+            path: "/mapbox",
+            name: "LayerMKT",
+            component: () => import("../views/layers/mapbox.vue"),
+            meta: { title: "menu.layersMapbox", icon: "DataBoard" },
+          },
+          {
+            path: "/dynamicMap",
+            name: "LayerDynamicMap",
+            component: () => import("../views/layers/dynamicMap.vue"),
+            meta: { title: "menu.layersDynamicMap", icon: "DataBoard" },
           },
         ],
       },

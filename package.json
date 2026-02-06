@@ -13,8 +13,12 @@
   },
   "dependencies": {
     "@vueuse/core": "^14.1.0",
+    "axios": "^1.13.4",
+    "cesium-navigation-es6": "^3.0.9",
     "element-plus": "^2.13.0",
     "pinia": "^3.0.4",
+    "proj4": "^2.20.2",
+    "shapefile": "^0.6.6",
     "vite-plugin-cesium": "^1.2.23",
     "vue": "^3.5.25",
     "vue-i18n": "^11.2.7",
