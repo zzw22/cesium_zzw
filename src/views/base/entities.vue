@@ -53,6 +53,7 @@ const addEntities = (viewer) => {
   });
 
   viewer.zoomTo(viewer.entities);
+   viewer.scene.globe.depthTestAgainstTerrain = true;//（开启）
 };
 
 onMounted(() => {
@@ -63,6 +64,11 @@ onMounted(() => {
     });
     viewer.imageryLayers.addImageryProvider(xyz);
     addEntities(viewer);
+  }
+});
+useCesiumCleanup(() => {
+  if (viewer) {
+    viewer.entities.removeAll();
   }
 });
 </script>

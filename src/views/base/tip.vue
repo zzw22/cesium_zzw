@@ -55,5 +55,8 @@ onMounted(() => {
 
 useCesiumCleanup(() => {
   if (removeListener) removeListener();
+  if (viewer) {
+    viewer.entities.removeAll();
+  }
 });
 </script>

@@ -16,10 +16,10 @@ import { onMounted, onUnmounted } from 'vue';
 import { useCesiumStore } from '@/store/cesiumStore';
 import * as Cesium from 'cesium';
 import { useCesiumCleanup } from '@/hooks/useCesiumCleanup';
-const airPlane =  '../../../public/modules/airPlane/scene.gltf'
-
+import airPlaneModel from '@/assets/modules/airPlane/scene.gltf?url'
 const cesiumStore = useCesiumStore();
 let viewer = null
+
 
 const sportEvent = (viewer) =>{
      let start = new Cesium.JulianDate.fromDate(new Date());
@@ -68,7 +68,7 @@ const sportEvent = (viewer) =>{
             // 基于位置移动自动计算方向.
             orientation: new Cesium.VelocityOrientationProperty(position),
             model: {
-                uri: airPlane,
+                uri: airPlaneModel,
                 minimumPixelSize: 32
             },
             label: {

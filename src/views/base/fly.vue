@@ -63,4 +63,10 @@ const cancel = () => {
   roaming.value.endRoaming();
 };
 
+useCesiumCleanup(() => {
+  if (roaming.value) {
+    roaming.value.endRoaming();
+  }
+});
+
 </script>
