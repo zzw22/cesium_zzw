@@ -3,11 +3,11 @@
     <div class="mb-4 font-bold border-b pb-2">3D Tiles 贴图叠加</div>
     <div class="text-xs text-gray-500 mb-2">CustomShader 效果演示</div>
     <div class="space-y-2">
-        <button @click="applyGradientShader" class="block w-full bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600 transition cursor-pointer">纯渐变色</button>
-        <button @click="applyGradientGlowShader" class="block w-full bg-green-500 text-white px-3 py-1 rounded hover:bg-green-600 transition cursor-pointer">渐变+动态光圈</button>
-        <button @click="applyTechGridShader" class="block w-full bg-purple-500 text-white px-3 py-1 rounded hover:bg-purple-600 transition cursor-pointer">科技网格</button>
-        <button @click="applyFlowingLightShader" class="block w-full bg-indigo-500 text-white px-3 py-1 rounded hover:bg-indigo-600 transition cursor-pointer">流光特效</button>
-        <button @click="clearShader" class="block w-full bg-gray-500 text-white px-3 py-1 rounded hover:bg-gray-600 transition cursor-pointer">清除</button>
+        <button @click="applyGradientShader" class="texture-btn texture-btn--blue">纯渐变色</button>
+        <button @click="applyGradientGlowShader" class="texture-btn texture-btn--green">渐变+动态光圈</button>
+        <button @click="applyTechGridShader" class="texture-btn texture-btn--purple">科技网格</button>
+        <button @click="applyFlowingLightShader" class="texture-btn texture-btn--indigo">流光特效</button>
+        <button @click="clearShader" class="texture-btn texture-btn--gray">清除</button>
     </div>
   </div>
 </template>
@@ -200,3 +200,31 @@ useCesiumCleanup(() => {
   }
 });
 </script>
+
+<style scoped>
+.texture-btn {
+  display: block;
+  width: 100%;
+  color: #ffffff;
+  padding: 0.25rem 0.75rem;
+  border-radius: 0.25rem;
+  transition: background-color 150ms;
+  cursor: pointer;
+  border: none;
+}
+
+.texture-btn--blue { background: #3b82f6; }
+.texture-btn--blue:hover { background: #2563eb; }
+
+.texture-btn--green { background: #22c55e; }
+.texture-btn--green:hover { background: #16a34a; }
+
+.texture-btn--purple { background: #a855f7; }
+.texture-btn--purple:hover { background: #9333ea; }
+
+.texture-btn--indigo { background: #6366f1; }
+.texture-btn--indigo:hover { background: #4f46e5; }
+
+.texture-btn--gray { background: #6b7280; }
+.texture-btn--gray:hover { background: #4b5563; }
+</style>

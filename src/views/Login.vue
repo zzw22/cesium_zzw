@@ -1,18 +1,10 @@
 <template>
-  <div
-    class="min-h-screen flex items-center justify-center relative overflow-hidden bg-gray-50 dark:bg-gray-900 transition-colors duration-300"
-  >
+  <div class="login-page">
     <!-- Background Shapes -->
-    <div class="absolute top-0 left-0 w-full h-full overflow-hidden z-0">
-      <div
-        class="absolute -top-[20%] -left-[10%] w-[70%] h-[70%] rounded-full bg-emerald-400/30 blur-3xl filter opacity-70 animate-blob"
-      ></div>
-      <div
-        class="absolute top-[20%] -right-[10%] w-[70%] h-[70%] rounded-full bg-green-300/30 blur-3xl filter opacity-70 animate-blob animation-delay-2000"
-      ></div>
-      <div
-        class="absolute -bottom-[20%] left-[20%] w-[70%] h-[70%] rounded-full bg-emerald-200/30 blur-3xl filter opacity-70 animate-blob animation-delay-4000"
-      ></div>
+    <div class="login-bg">
+      <div class="login-blob login-blob--1 animate-blob"></div>
+      <div class="login-blob login-blob--2 animate-blob animation-delay-2000"></div>
+      <div class="login-blob login-blob--3 animate-blob animation-delay-4000"></div>
     </div>
 
     <!-- Top Right Actions -->
@@ -26,7 +18,7 @@
       />
       <el-dropdown @command="toggleLanguage">
         <span
-          class="cursor-pointer flex items-center text-gray-600 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white"
+          class="login-action"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -53,21 +45,13 @@
     </div>
 
     <!-- Login Card -->
-    <div
-      class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8 w-full max-w-md z-10 relative transition-colors duration-300"
-    >
-      <div class="flex flex-col items-center mb-8">
+    <div class="login-card">
+      <div class="login-card-header">
         <!-- Logo -->
-        <div
-          class="w-16 h-16 bg-emerald-500 rounded-2xl flex items-center justify-center mb-4 transform rotate-45 shadow-lg"
-        >
-          <span class="text-white text-3xl font-bold transform -rotate-45"
-            >V</span
-          >
+        <div class="login-logo">
+          <span class="login-logo-text">V</span>
         </div>
-        <h1
-          class="text-2xl font-bold text-gray-800 dark:text-white tracking-wide"
-        >
+        <h1 class="login-title">
           {{ t("login.title") }}
         </h1>
       </div>
@@ -76,7 +60,7 @@
         :model="loginForm"
         :rules="rules"
         ref="loginFormRef"
-        class="space-y-6"
+        class="login-form"
       >
         <el-form-item prop="username">
           <el-input
@@ -104,7 +88,7 @@
             </template>
             <template #suffix>
               <el-icon
-                class="cursor-pointer text-gray-400 hover:text-gray-600"
+                class="login-password-toggle"
                 @click="passwordVisible = !passwordVisible"
               >
                 <View v-if="passwordVisible" />
@@ -115,7 +99,7 @@
         </el-form-item>
 
         <el-form-item prop="captcha">
-          <div class="flex space-x-4">
+          <div class="login-captcha-row">
             <el-input
               v-model="loginForm.captcha"
               :placeholder="t('login.captchaPlaceholder')"
@@ -123,11 +107,11 @@
               class="flex-1 custom-input"
             />
             <div
-              class="w-32 h-10 bg-gray-50 dark:bg-gray-700 rounded border border-gray-200 dark:border-gray-600 flex items-center justify-center cursor-pointer select-none"
+              class="login-captcha-box"
               @click="refreshCaptcha"
             >
               <span
-                class="text-lg font-bold text-emerald-500 italic tracking-wider font-mono"
+                class="login-captcha-text"
                 >{{ captchaExpression }}</span
               >
             </div>
@@ -136,7 +120,7 @@
 
         <el-button
           type="primary"
-          class="w-full !h-12 !text-lg !rounded-full !bg-emerald-500 hover:!bg-emerald-600 border-none shadow-md transition-all duration-300 transform hover:scale-[1.02]"
+          class="login-submit"
           @click="handleLogin"
           :loading="loading"
         >
@@ -244,6 +228,195 @@ onMounted(() => {
 </script>
 
 <style scoped>
+.login-page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+  background: #f9fafb;
+  transition: background-color 300ms;
+}
+
+.dark .login-page {
+  background: #111827;
+}
+
+.login-bg {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  z-index: 0;
+}
+
+.login-blob {
+  position: absolute;
+  width: 70%;
+  height: 70%;
+  border-radius: 9999px;
+  filter: blur(64px);
+  opacity: 0.7;
+}
+
+.login-blob--1 {
+  top: -20%;
+  left: -10%;
+  background: rgba(52, 211, 153, 0.3);
+}
+
+.login-blob--2 {
+  top: 20%;
+  right: -10%;
+  background: rgba(134, 239, 172, 0.3);
+}
+
+.login-blob--3 {
+  bottom: -20%;
+  left: 20%;
+  background: rgba(167, 243, 208, 0.3);
+}
+
+.login-action {
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  color: #4b5563;
+}
+
+.login-action:hover {
+  color: #111827;
+}
+
+.dark .login-action {
+  color: #d1d5db;
+}
+
+.dark .login-action:hover {
+  color: #ffffff;
+}
+
+.login-password-toggle {
+  cursor: pointer;
+  color: #9ca3af;
+}
+
+.login-password-toggle:hover {
+  color: #4b5563;
+}
+
+.login-card {
+  background: #ffffff;
+  border-radius: 1rem;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+  padding: 2rem;
+  width: 100%;
+  max-width: 28rem;
+  z-index: 10;
+  position: relative;
+  transition: background-color 300ms;
+}
+
+.dark .login-card {
+  background: #1f2937;
+}
+
+.login-card-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.login-logo {
+  width: 4rem;
+  height: 4rem;
+  background: #10b981;
+  border-radius: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1rem;
+  transform: rotate(45deg);
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
+}
+
+.login-logo-text {
+  color: #ffffff;
+  font-size: 1.875rem;
+  line-height: 2.25rem;
+  font-weight: 700;
+  transform: rotate(-45deg);
+}
+
+.login-title {
+  font-size: 1.5rem;
+  line-height: 2rem;
+  font-weight: 700;
+  color: #1f2937;
+  letter-spacing: 0.025em;
+}
+
+.dark .login-title {
+  color: #ffffff;
+}
+
+.login-form {
+  display: flex;
+  flex-direction: column;
+  row-gap: 1.5rem;
+}
+
+.login-captcha-row {
+  display: flex;
+  column-gap: 1rem;
+  align-items: center;
+}
+
+.login-captcha-box {
+  width: 8rem;
+  height: 2.5rem;
+  background: #f9fafb;
+  border-radius: 0.25rem;
+  border: 1px solid #e5e7eb;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  user-select: none;
+}
+
+.dark .login-captcha-box {
+  background: #374151;
+  border-color: #4b5563;
+}
+
+.login-captcha-text {
+  font-size: 1.125rem;
+  line-height: 1.75rem;
+  font-weight: 700;
+  color: #10b981;
+  font-style: italic;
+  letter-spacing: 0.05em;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+}
+
+.login-submit {
+  width: 100%;
+  height: 3rem;
+  font-size: 1.125rem;
+  border-radius: 9999px;
+  background: #10b981;
+  border: none;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
+  transition: transform 300ms, background-color 300ms;
+}
+
+.login-submit:hover {
+  background: #059669;
+  transform: scale(1.02);
+}
+
 .animate-blob {
   animation: blob 7s infinite;
 }

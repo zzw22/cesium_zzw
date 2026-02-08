@@ -1,4 +1,11 @@
 <!--
+ * @Title: 
+ * @Author: zhangzhiwei
+ * @Date: 2026-02-06 21:15:36
+ * @FilePath: \src\views\models\primitiveMassive.vue
+ * @Description: 
+-->
+<!--
  * @Title: Primitive加载大量模型
  * @Description: 使用ModelInstanceCollection加载大量同类模型
 -->
