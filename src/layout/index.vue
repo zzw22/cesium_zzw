@@ -22,20 +22,18 @@
       <!-- Sidebar -->
       <aside
         :class="[
-          'bg-white dark:bg-gray-800 text-gray-800 dark:text-white transition-all duration-300 ease-in-out',
-          sidebarCollapsed ? 'w-12' : 'w-48',
+          'layout-sidebar',
+          sidebarCollapsed ? 'layout-sidebar--collapsed' : 'layout-sidebar--expanded',
         ]"
       >
         <el-menu
           default-active="1"
-          class="h-full bg-white flex-direction-column dark:bg-gray-800 border-none !w-[100%]"
+          class="layout-menu"
           router
           :collapse="sidebarCollapsed"
         >
-          <header class="bg-white dark:bg-gray-800 py-3 px-4">
-            <h1
-              class="text-xl font-bold text-gray-800 dark:text-white flex items-center"
-            >
+          <header class="layout-menu-header">
+            <h1 class="layout-logo">
               <img
                 src="@/assets/comments/header_logo.svg"
                 alt="logo"
@@ -43,7 +41,7 @@
               />
               <span
                 v-show="!sidebarCollapsed"
-                class="text-[16px] font-bold text-gray-800 dark:text-white"
+                class="layout-logo-text"
                 >Vue3 Admin</span
               >
             </h1>
@@ -89,22 +87,22 @@
         class="relative flex flex-col transition-all duration-300 ease-in-out flex-1 min-w-0"
       >
         <header
-          class="relative z-10 bg-white dark:bg-gray-800 flex flex-col px-4 transition-colors duration-300"
+          class="layout-topbar"
         >
           <!-- 面包屑导航 -->
           <div
-            class="flex items-center h-12 border-b border-gray-200 dark:border-gray-700 w-full"
+            class="layout-breadcrumb-row"
           >
             <button
               @click="toggleSidebar"
-              class="mr-4 text-gray-600 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white flex items-center"
+              class="layout-icon-button"
             >
               <el-icon v-if="sidebarCollapsed"><Expand /></el-icon>
               <el-icon v-else><Fold /></el-icon>
             </button>
             <el-breadcrumb separator="/">
               <el-breadcrumb-item v-for="item in breadcrumbs" :key="item.path">
-                <span class="text-[17px] dark:text-gray-300">{{
+                <span class="layout-breadcrumb-text">{{
                   t(item.title)
                 }}</span>
               </el-breadcrumb-item>
@@ -112,9 +110,9 @@
 
             <div class="flex-1"></div>
 
-            <div class="flex items-center space-x-4 mr-4">
+            <div class="layout-actions">
               <span
-                class="cursor-pointer flex items-center text-gray-600 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white"
+                class="layout-action"
                 @click="toggle"
               >
                 <img
@@ -131,7 +129,7 @@
               />
               <el-dropdown @command="toggleLanguage">
                 <span
-                  class="cursor-pointer flex items-center text-gray-600 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white"
+                  class="layout-action"
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -333,6 +331,131 @@ watch(
 </script>
 
 <style scoped>
+.layout-sidebar {
+  background: #ffffff;
+  color: #1f2937;
+  transition: all 300ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.dark .layout-sidebar {
+  background: #1f2937;
+  color: #ffffff;
+}
+
+.layout-sidebar--collapsed {
+  width: 3rem;
+}
+
+.layout-sidebar--expanded {
+  width: 12rem;
+}
+
+.layout-menu {
+  height: 100%;
+  width: 100%;
+  border-right: none;
+  background: transparent;
+  display: flex;
+  flex-direction: column;
+}
+
+.layout-menu-header {
+  background: transparent;
+  padding: 0.75rem 1rem;
+}
+
+.layout-logo {
+  display: flex;
+  align-items: center;
+  font-size: 1.25rem;
+  line-height: 1.75rem;
+  font-weight: 700;
+}
+
+.layout-logo-text {
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.layout-topbar {
+  position: relative;
+  z-index: 10;
+  background: #ffffff;
+  display: flex;
+  flex-direction: column;
+  padding: 0 1rem;
+  transition: background-color 300ms;
+}
+
+.dark .layout-topbar {
+  background: #1f2937;
+}
+
+.layout-breadcrumb-row {
+  display: flex;
+  align-items: center;
+  height: 3rem;
+  width: 100%;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.dark .layout-breadcrumb-row {
+  border-bottom-color: #374151;
+}
+
+.layout-icon-button {
+  margin-right: 1rem;
+  color: #4b5563;
+  display: inline-flex;
+  align-items: center;
+}
+
+.layout-icon-button:hover {
+  color: #111827;
+}
+
+.dark .layout-icon-button {
+  color: #d1d5db;
+}
+
+.dark .layout-icon-button:hover {
+  color: #ffffff;
+}
+
+.layout-breadcrumb-text {
+  font-size: 17px;
+}
+
+.dark .layout-breadcrumb-text {
+  color: #d1d5db;
+}
+
+.layout-actions {
+  display: flex;
+  align-items: center;
+  column-gap: 1rem;
+  margin-right: 1rem;
+}
+
+.layout-action {
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  color: #4b5563;
+}
+
+.layout-action:hover {
+  color: #111827;
+}
+
+.dark .layout-action {
+  color: #d1d5db;
+}
+
+.dark .layout-action:hover {
+  color: #ffffff;
+}
+
 .el-menu {
   display: flex;
   flex-direction: column;

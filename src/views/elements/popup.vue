@@ -6,9 +6,7 @@
  * @Description: 
 -->
 <template>
-  <div 
-    class="absolute top-4 left-4 bg-white p-4 rounded shadow z-50"
-  >
+  <div class="popup-demo">
     <div class="mb-2 font-bold">Popup 点击示例</div>
   </div>
 
@@ -16,17 +14,17 @@
   <div 
     v-show="showPopup && isVisible" 
     ref="popupRef" 
-    class="fixed bg-white p-4 rounded shadow-lg border border-gray-200 w-64 z-[9999] transform -translate-x-1/2 -translate-y-full mt-[-15px]"
+    class="popup-panel"
     :style="{ top: popupPos.y + 'px', left: popupPos.x + 'px' }"
   >
-    <div class="flex justify-between items-center mb-2 border-b pb-1">
-      <div class="font-bold text-base">{{ popupInfo.title }}</div>
-      <div class="cursor-pointer text-gray-400 hover:text-gray-600" @click="closePopup">✕</div>
+    <div class="popup-header">
+      <div class="popup-title">{{ popupInfo.title }}</div>
+      <div class="popup-close" @click="closePopup">✕</div>
     </div>
-    <div class="text-sm text-gray-600 leading-relaxed">{{ popupInfo.content }}</div>
+    <div class="popup-content">{{ popupInfo.content }}</div>
     
     <!-- 三角箭头 -->
-    <div class="absolute bottom-[-6px] left-1/2 transform -translate-x-1/2 w-3 h-3 bg-white border-b border-r border-gray-200 rotate-45"></div>
+    <div class="popup-arrow"></div>
   </div>
 </template>
 
@@ -228,3 +226,71 @@ useCesiumCleanup(() => {
   }
 });
 </script>
+
+<style scoped>
+.popup-demo {
+  position: absolute;
+  top: 1rem;
+  left: 1rem;
+  background: #ffffff;
+  padding: 1rem;
+  border-radius: 0.25rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.06);
+  z-index: 50;
+}
+
+.popup-panel {
+  position: fixed;
+  background: #ffffff;
+  padding: 1rem;
+  border-radius: 0.25rem;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
+  border: 1px solid #e5e7eb;
+  width: 16rem;
+  z-index: 9999;
+  transform: translate(-50%, -100%);
+  margin-top: -15px;
+}
+
+.popup-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+  padding-bottom: 0.25rem;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.popup-title {
+  font-weight: 700;
+  font-size: 1rem;
+  line-height: 1.5rem;
+}
+
+.popup-close {
+  cursor: pointer;
+  color: #9ca3af;
+}
+
+.popup-close:hover {
+  color: #4b5563;
+}
+
+.popup-content {
+  font-size: 0.875rem;
+  line-height: 1.4;
+  color: #4b5563;
+}
+
+.popup-arrow {
+  position: absolute;
+  bottom: -6px;
+  left: 50%;
+  width: 0.75rem;
+  height: 0.75rem;
+  background: #ffffff;
+  border-bottom: 1px solid #e5e7eb;
+  border-right: 1px solid #e5e7eb;
+  transform: translateX(-50%) rotate(45deg);
+}
+</style>
