@@ -280,8 +280,8 @@ watch([lightIntensity, lightHeight], () => {
   position: absolute;
   top: 10px;
   left: 10px;
-  background: rgba(20, 20, 30, 0.8);
-  color: white;
+  background: white;
+  color: black;
   padding: 15px;
   border-radius: 8px;
   width: 250px;
