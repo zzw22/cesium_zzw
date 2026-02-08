@@ -5,13 +5,6 @@
  * @FilePath: \src\layout\index.vue
  * @Description: 
 -->
-<!--
- * @Title: 
- * @Author: zhangzhiwei
- * @Date: 2025-12-26 21:34:21
- * @FilePath: \src\layout\index.vue
- * @Description: 
--->
 
 <template>
   <div class="h-screen flex flex-col">
