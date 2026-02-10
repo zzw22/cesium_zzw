@@ -9,7 +9,6 @@ import { createRouter, createWebHistory, RouterView } from "vue-router";
 import Layout from "../layout/index.vue";
 import Login from "../views/Login.vue";
 import Home from "../views/Home.vue";
-import CesiumViewer from "../views/CesiumViewer.vue";
 import BaseEntities from "../views/base/entities.vue";
 import BasePosition from "../views/base/position.vue";
 import BaseFly from "../views/base/fly.vue";
@@ -32,12 +31,6 @@ const routes = [
         name: "Home",
         component: Home,
         meta: { title: "menu.home", icon: "House" },
-      },
-      {
-        path: "/cesium",
-        name: "CesiumViewer",
-        component: CesiumViewer,
-        meta: { title: "menu.cesium", icon: "Compass" },
       },
       {
         path: "/base",
