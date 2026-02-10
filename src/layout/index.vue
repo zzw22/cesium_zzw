@@ -104,6 +104,22 @@
             <div class="flex-1"></div>
 
             <div class="layout-actions">
+           <el-autocomplete
+                v-model="searchText"
+                :fetch-suggestions="querySearch"
+                placeholder="请输入功能名称"
+                class="layout-search"
+                @select="handleSelect"
+                :trigger-on-focus="false"
+                clearable
+              >
+                <template #suffix>
+                  <el-icon class="el-input__icon"><Search /></el-icon>
+                </template>
+                <template #default="{ item }">
+                  <div class="value">{{ item.value }}</div>
+                </template>
+              </el-autocomplete>
               <span
                 class="layout-action"
                 @click="toggle"
@@ -201,7 +217,7 @@
 <script setup>
 import { ref, computed, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
-import { Moon, Sunny } from "@element-plus/icons-vue";
+import { Expand, Fold, Moon, Sunny, Search } from "@element-plus/icons-vue";
 import { useI18n } from "vue-i18n";
 import CesiumComponent from "@/components/cesiumCom/index.vue";
 
@@ -230,6 +246,59 @@ const menuRoutes = computed(() => {
   }
   return [];
 });
+
+// 功能搜索逻辑
+const searchText = ref("");
+
+const allRoutes = computed(() => {
+  const options = [];
+  
+  const traverse = (routes) => {
+    routes.forEach(route => {
+      let path = route.path;
+      // Handle Home route
+      if (path === "") path = "/";
+      
+      if (route.meta && route.meta.title) {
+        options.push({
+          value: t(route.meta.title),
+          path: path
+        });
+      }
+      
+      if (route.children && route.children.length > 0) {
+        traverse(route.children);
+      }
+    });
+  };
+  
+  if (menuRoutes.value) {
+    traverse(menuRoutes.value);
+  }
+  return options;
+});
+
+const querySearch = (queryString, cb) => {
+  const results = queryString
+    ? allRoutes.value.filter(createFilter(queryString))
+    : allRoutes.value;
+  cb(results);
+};
+
+const createFilter = (queryString) => {
+  return (item) => {
+    return (
+      item.value.toLowerCase().indexOf(queryString.toLowerCase()) !== -1
+    );
+  };
+};
+
+const handleSelect = (item) => {
+  if (item.path) {
+    router.push(item.path);
+    searchText.value = ""; 
+  }
+};
 
 const sidebarCollapsed = ref(false);
 const visitedViews = ref([]);
@@ -457,5 +526,14 @@ watch(
   display: flex;
   align-items: center;
   justify-content: flex-start;
+}
+
+.layout-search {
+  width: 200px;
+  transition: width 0.3s;
+}
+
+.layout-search:focus-within {
+  width: 300px;
 }
 </style>

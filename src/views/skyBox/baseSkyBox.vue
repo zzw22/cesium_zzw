@@ -43,9 +43,7 @@ onMounted(() => {
 
 onUnmounted(() => {
   if (viewer && !viewer.isDestroyed()) {
-     if (originalSkyBox) {
-        viewer.scene.skyBox = originalSkyBox;
-     }
+    viewer.scene.skyBox = undefined;
   }
 });
 </script>

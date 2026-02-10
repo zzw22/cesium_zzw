@@ -1,3 +1,10 @@
+<!--
+ * @Title: 
+ * @Author: zhangzhiwei
+ * @Date: 2026-02-08 17:45:22
+ * @FilePath: \src\views\effects\electronicFence2.vue
+ * @Description: 
+-->
 <template>
   <div class="effect-panel">
     <h3>横向移动电子围栏</h3>
@@ -18,7 +25,6 @@ onMounted(() => {
   const viewer = store.viewer;
   if (!viewer) return;
 
-  // 1.html 中的数据 (成都坐标)
   let data = [
     [104.0185546875, 30.66235300961486],
     [104.01589393615723, 30.65652022496456],

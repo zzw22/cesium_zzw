@@ -1,3 +1,4 @@
+
 <template>
   <div class="effect-panel">
     <h3>自动移动的视锥体</h3>
@@ -19,7 +20,6 @@ onMounted(() => {
   const viewer = store.viewer;
   if (!viewer) return;
 
-  // Save original clock settings
   originalClockViewModel = {
     startTime: viewer.clock.startTime.clone(),
     stopTime: viewer.clock.stopTime.clone(),
@@ -53,7 +53,6 @@ onMounted(() => {
       property.addSample(time, pos);
   }
   
-  // Entity to drive position and orientation
   entity = viewer.entities.add({
       position: property,
       orientation: new Cesium.VelocityOrientationProperty(property),
@@ -68,12 +67,11 @@ onMounted(() => {
       }
   });
 
-  // Use DebugCameraPrimitive to simulate frustum
   const scratchCamera = new Cesium.Camera(viewer.scene);
   scratchCamera.frustum.fov = Cesium.Math.toRadians(60.0);
   scratchCamera.frustum.aspectRatio = 1.33;
   scratchCamera.frustum.near = 10.0;
-  scratchCamera.frustum.far = 1000.0; // Increased far plane for visibility
+  scratchCamera.frustum.far = 1000.0; 
 
   primitive = new Cesium.DebugCameraPrimitive({
       camera: scratchCamera,
@@ -94,9 +92,8 @@ onMounted(() => {
               position
           );
           
-          // Make frustum look down (apex at top)
-          const direction = Cesium.Matrix4.multiplyByPointAsVector(transform, Cesium.Cartesian3.negate(Cesium.Cartesian3.UNIT_Z, new Cesium.Cartesian3()), new Cesium.Cartesian3());
-          const up = Cesium.Matrix4.multiplyByPointAsVector(transform, Cesium.Cartesian3.UNIT_X, new Cesium.Cartesian3());
+          const direction = Cesium.Matrix4.multiplyByPointAsVector(transform, Cesium.Cartesian3.UNIT_X, new Cesium.Cartesian3());
+          const up = Cesium.Matrix4.multiplyByPointAsVector(transform, Cesium.Cartesian3.UNIT_Z, new Cesium.Cartesian3());
           
           scratchCamera.direction = direction;
           scratchCamera.up = up;
@@ -120,7 +117,6 @@ onUnmounted(() => {
       }
       if(primitive) viewer.scene.primitives.remove(primitive);
       
-      // Restore clock
       if (originalClockViewModel) {
           viewer.clock.startTime = originalClockViewModel.startTime;
           viewer.clock.stopTime = originalClockViewModel.stopTime;

@@ -1,3 +1,10 @@
+<!--
+ * @Title: 流动线
+ * @Author: zhangzhiwei
+ * @Date: 2026-02-08 17:45:22
+ * @FilePath: \src\views\effects\flowLine.vue
+ * @Description: 流动线
+-->
 <template>
   <div class="effect-panel">
     <h3>流动线</h3>

@@ -1,3 +1,4 @@
+
 <template>
   <div class="effect-panel">
     <h3>电子围栏 </h3>
@@ -9,7 +10,7 @@ import { onMounted, onUnmounted } from "vue";
 import { useCesiumStore } from "@/store/cesiumStore";
 import * as Cesium from "cesium";
 import { DynamicWallMaterialProperty } from "@/utils/cesium/DynamicWallMaterialProperty";
-import wallImage from '@/assets/images/wall.png'; // 确保路径正确
+import wallImage from '@/assets/images/wall.png'; 
 
 const store = useCesiumStore();
 let datasouce = null;
@@ -18,7 +19,6 @@ onMounted(() => {
   const viewer = store.viewer;
   if (!viewer) return;
 
-  // 1.html 中的数据 (成都坐标)
   let data = [
     [104.0185546875, 30.66235300961486],
     [104.01589393615723, 30.65652022496456],
