@@ -63,6 +63,12 @@ onMounted(() => {
     ...props,
     timeline: true,
     animation: true,
+    contextOptions: {
+      webgl: {
+        alpha: true,
+      }
+    },
+    orderIndependentTranslucency: false,// 关闭有序不透明渲染，否则会导致天空盒和模型的透明度问题
   });
   
   // 隐藏版权信息

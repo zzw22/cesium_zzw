@@ -420,11 +420,37 @@ const routes = [
             component: () => import("../views/effects/pointLight.vue"),
             meta: { title: "点光源", icon: "DataBoard" },
           },
+
           {
             path: "/city-flow",
             name: "EffectCityFlow",
             component: () => import("../views/effects/cityFlow.vue"),
             meta: { title: "城市流向", icon: "DataBoard" },
+          },
+        ],
+      },
+      {
+        path: "/sky-box",
+        name: "EffectSkyBox",
+        meta: { title: "天空盒", icon: "Sunny" },
+        children: [
+          {
+            path: "/base-sky-box",
+            name: "BaseSkyBox",
+            component: () => import("../views/skyBox/baseSkyBox.vue"),
+            meta: { title: "基础天空盒", icon: "Sunny" },
+          },
+          {
+            path: "/near-earth",
+            name: "NearEarthSkyBox",
+            component: () => import("../views/skyBox/nearEarthSkyBox.vue"),
+            meta: { title: "近地天空盒", icon: "Sunny" },
+          },
+          {
+            path: "/ground-sky-box",
+            name: "GroundSkyBox",
+            component: () => import("../views/skyBox/groundSkyBox.vue"),
+            meta: { title: "自定义天空盒", icon: "Sunny" },
           },
         ],
       },
