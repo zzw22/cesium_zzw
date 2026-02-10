@@ -1,3 +1,10 @@
+<!--
+ * @Title: 自动移动的圆锥体
+ * @Author: zhangzhiwei
+ * @Date: 2026-02-08 17:45:22
+ * @FilePath: \src\views\effects\movingCone.vue
+ * @Description: 自动移动的圆锥体
+-->
 <template>
   <div class="effect-panel">
     <h3>自动移动的圆锥体</h3>
@@ -17,7 +24,6 @@ onMounted(() => {
   const viewer = store.viewer;
   if (!viewer) return;
 
-  // Save original clock settings
   originalClockViewModel = {
     startTime: viewer.clock.startTime.clone(),
     stopTime: viewer.clock.stopTime.clone(),
@@ -30,7 +36,6 @@ onMounted(() => {
   const start = Cesium.JulianDate.now();
   const stop = Cesium.JulianDate.addSeconds(start, 360, new Cesium.JulianDate());
 
-  // Set time
   viewer.clock.startTime = start.clone();
   viewer.clock.stopTime = stop.clone();
   viewer.clock.currentTime = start.clone();
@@ -38,14 +43,11 @@ onMounted(() => {
   viewer.clock.multiplier = 10;
   viewer.clock.shouldAnimate = true;
 
-  // Calculate path
   const property = new Cesium.SampledPositionProperty();
   
-  // Circular motion
   for (let i = 0; i <= 360; i += 10) {
       const time = Cesium.JulianDate.addSeconds(start, i, new Cesium.JulianDate());
       const radians = Cesium.Math.toRadians(i);
-      // Use proper ENU offset
       const center = Cesium.Cartesian3.fromDegrees(114.3055, 30.5928);
       const offset = new Cesium.Cartesian3(Math.cos(radians) * 2000, Math.sin(radians) * 2000, 500); // 2km radius
       
@@ -63,7 +65,6 @@ onMounted(() => {
           topRadius: 0,
           bottomRadius: 200,
           material: new Cesium.ColorMaterialProperty(new Cesium.CallbackProperty((time) => {
-              // Pulse effect
               const tick = Cesium.JulianDate.secondsDifference(time, start);
               const alpha = (Math.sin(tick * 5.0) + 1.0) / 2.0 * 0.6 + 0.2;
               return Cesium.Color.YELLOW.withAlpha(alpha);
@@ -83,7 +84,6 @@ onUnmounted(() => {
     }
     viewer.trackedEntity = undefined;
     
-    // Restore clock
     if (originalClockViewModel) {
         viewer.clock.startTime = originalClockViewModel.startTime;
         viewer.clock.stopTime = originalClockViewModel.stopTime;

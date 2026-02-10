@@ -3,13 +3,19 @@
     <div class="panel-header">测量工具</div>
     <div class="panel-content">
       <div class="mb-2">
+        <el-radio-group v-model="mapType" size="small" @change="handleMapTypeChange">
+          <el-radio-button label="imagery">影像图</el-radio-button>
+          <el-radio-button label="terrain">地形图</el-radio-button>
+        </el-radio-group>
+      </div>
+      <div class="mb-2">
         <el-select v-model="mode" size="small" style="width: 180px">
-          <el-option label="空间距离" value="spaceDistance" />
-          <el-option label="地表距离" value="surfaceDistance" />
-          <el-option label="地表面积" value="surfaceArea" />
-          <el-option label="高度差" value="heightDiff" />
-          <el-option label="三角测量" value="triangle" />
-          <el-option label="方位角" value="azimuth" />
+          <el-option
+            v-for="item in availableModes"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value"
+          />
         </el-select>
       </div>
       <el-button size="small" type="primary" @click="start">开始测量</el-button>
@@ -21,12 +27,13 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from "vue";
+import { ref, onMounted, computed } from "vue";
 import { useCesiumStore } from "@/store/cesiumStore";
 import { useCesiumCleanup } from "@/hooks/useCesiumCleanup";
 import * as Cesium from "cesium";
 
 const mode = ref("spaceDistance");
+const mapType = ref("imagery");
 const info = ref("");
 let viewer = null;
 let handler = null;
@@ -34,12 +41,55 @@ let points = [];
 let drawEntities = [];
 let resultEntities = [];
 
+const availableModes = computed(() => {
+  const allModes = [
+    { label: "空间距离", value: "spaceDistance" },
+    { label: "地表距离", value: "surfaceDistance" },
+    { label: "地表面积", value: "surfaceArea" },
+    { label: "高度差", value: "heightDiff" },
+    { label: "三角测量", value: "triangle" },
+    { label: "方位角", value: "azimuth" },
+  ];
+  if (mapType.value === "imagery") {
+    return allModes.filter((m) =>
+      ["spaceDistance", "triangle", "azimuth"].includes(m.value),
+    );
+  } else if (mapType.value === "terrain") {
+    return allModes.filter((m) =>
+      ["surfaceDistance", "surfaceArea", "heightDiff"].includes(m.value),
+    );
+  }
+  return allModes;
+});
+
+const handleMapTypeChange = async (val) => {
+  if (!viewer) return;
+  clearAll();
+  if (val === "imagery") {
+    viewer.terrainProvider = new Cesium.EllipsoidTerrainProvider();
+    mode.value = "spaceDistance";
+  } else {
+    try {
+      viewer.terrainProvider =
+        await Cesium.ArcGISTiledElevationTerrainProvider.fromUrl(
+          "https://elevation3d.arcgis.com/arcgis/rest/services/WorldElevation3D/Terrain3D/ImageServer",
+        );
+      mode.value = "surfaceDistance";
+    } catch (e) {
+      console.error("Terrain load failed", e);
+    }
+  }
+};
+
 onMounted(() => {
   viewer = useCesiumStore().viewer;
 });
 
 useCesiumCleanup(() => {
   clearAll();
+  if (viewer) {
+    viewer.terrainProvider = new Cesium.EllipsoidTerrainProvider();
+  }
 });
 
 const addPoint = (pos) => {
