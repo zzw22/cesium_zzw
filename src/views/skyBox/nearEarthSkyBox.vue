@@ -41,10 +41,10 @@ const addInfo = () => {
       sources: {
         positiveX: new URL('../../assets/images/skyBoxImgs/Right.jpg', import.meta.url).href,
         negativeX: new URL('../../assets/images/skyBoxImgs/Left.jpg', import.meta.url).href,
-        positiveY: new URL('../../assets/images/skyBoxImgs/Up.jpg', import.meta.url).href,
-        negativeY: new URL('../../assets/images/skyBoxImgs/Down.jpg', import.meta.url).href,
-        positiveZ: new URL('../../assets/images/skyBoxImgs/Back.jpg', import.meta.url).href,
-        negativeZ: new URL('../../assets/images/skyBoxImgs/Front.jpg', import.meta.url).href
+        positiveY: new URL('../../assets/images/skyBoxImgs/Front.jpg', import.meta.url).href,
+        negativeY: new URL('../../assets/images/skyBoxImgs/Back.jpg', import.meta.url).href,
+        positiveZ: new URL('../../assets/images/skyBoxImgs/Up.jpg', import.meta.url).href,
+        negativeZ: new URL('../../assets/images/skyBoxImgs/Down.jpg', import.meta.url).href
       }
   });
 
