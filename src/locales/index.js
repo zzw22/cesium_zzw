@@ -166,10 +166,8 @@ const messages = {
       elementGIF: 'GIF动画',
       elementClustering: '实体聚集',
       elementCZML: 'CZML加载',
-      
       particle: '粒子特效',
       particleExamples: '综合示例',
-
       models: '模型实例',
       modelLoad: '加载模型',
       modelPrimitive: 'Primitive模型',
@@ -180,7 +178,11 @@ const messages = {
       '3dtiles': '3D Tiles',
       texture3dtiles: '3D Tiles贴图',
       modelInfo3dtiles: '模型信息(3D Tiles)',
-      superMap3dtiles:'superMap3dtiles'
+      superMap3dtiles:'superMap3dtiles',
+      skyBox:'天空盒',
+      baseSkyBox:'基础天空盒',
+      groundSkyBox:'近地天空盒',
+      nearEarthSkyBox:'背景天空盒',
     },
     login: {
       title: 'Vue3 Admin',
