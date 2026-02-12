@@ -28,9 +28,16 @@ const loadTileset = async () => {
     tileset = await Cesium.Cesium3DTileset.fromUrl(tilesetUrl, {
       maximumScreenSpaceError: 16,
     });
-    
+
+    // 调整模型高度，使其接地
+    const cartographic = Cesium.Cartographic.fromCartesian(tileset.boundingSphere.center);
+    const surface = Cesium.Cartesian3.fromRadians(cartographic.longitude, cartographic.latitude, 0.0);
+    const offset = Cesium.Cartesian3.fromRadians(cartographic.longitude, cartographic.latitude, -20.0);
+    const translation = Cesium.Cartesian3.subtract(offset, surface, new Cesium.Cartesian3());
+    tileset.modelMatrix = Cesium.Matrix4.fromTranslation(translation);
+
     viewer.scene.primitives.add(tileset);
-    
+
     await viewer.zoomTo(tileset);
     
     // 调整视角
@@ -95,49 +102,78 @@ const applyGradientGlowShader = () => {
     tileset.customShader = customShader;
 };
 
-// 科技网格
+// 科技网格 - 带纹理贴图
 const applyTechGridShader = () => {
     if (!tileset) return;
     const customShader = new Cesium.CustomShader({
         lightingModel: Cesium.LightingModel.UNLIT,
+        varyings: {
+            v_normalMC: Cesium.VaryingType.VEC3,
+            v_posMC: Cesium.VaryingType.VEC3
+        },
+        uniforms: {
+            u_texture: {
+                value: new Cesium.TextureUniform({
+                    url: new URL('@/assets/images/wall.jpg', import.meta.url).href
+                }),
+                type: Cesium.UniformType.SAMPLER_2D
+            }
+        },
+        vertexShaderText: `
+            void vertexMain(VertexInput vsInput, inout czm_modelVertexOutput vsOutput) {
+                v_normalMC = vsInput.attributes.normalMC;
+                v_posMC = vsInput.attributes.positionMC;
+            }
+        `,
         fragmentShaderText: `
             void fragmentMain(FragmentInput fsInput, inout czm_modelMaterial material) {
-                vec3 positionMC = fsInput.attributes.positionMC;
-                
-                // 基础深色背景
-                vec3 baseColor = vec3(0.05, 0.05, 0.1);
-                
-                // 网格线颜色
-                vec3 gridColor = vec3(0.0, 1.0, 1.0);
-                
-                // 网格间距
-                float spacing = 10.0;
-                
-                // 动态扫描线 (沿Z轴上升)
-                float scanLine = fract(czm_frameNumber / 200.0) * 200.0; // 扫描范围
-                float scanWidth = 5.0;
-                
-                // 计算网格
-                // 使用 fract 函数判断是否在网格线上
-                float lineX = step(0.95, fract(positionMC.x / spacing));
-                float lineY = step(0.95, fract(positionMC.y / spacing));
-                float lineZ = step(0.95, fract(positionMC.z / spacing));
-                
-                // 混合网格
-                float grid = max(max(lineX, lineY), lineZ);
-                
-                // 扫描线效果
-                float scan = 0.0;
-                if (positionMC.z > scanLine && positionMC.z < scanLine + scanWidth) {
-                    scan = 1.0;
+                vec3 positionMC = v_posMC;
+
+                // 屋顶颜色（当法向量与Z轴接近平行时，判定为屋顶）
+                if (dot(vec3(0.0, 0.0, 1.0), v_normalMC) > 0.95) {
+                    material.diffuse = vec3(0.85, 0.85, 0.85);
+                } else {
+                    // 贴图尺寸设置
+                    float width = 30.0;
+                    float height = 50.0;
+
+                    float textureX = 0.0;
+                    float dotYAxis = dot(vec3(0.0, 1.0, 0.0), v_normalMC);
+
+                    // 根据面的朝向选择贴图坐标
+                    if (dotYAxis > 0.71 || dotYAxis < -0.71) {
+                        // 前后面使用X坐标
+                        textureX = mod(positionMC.x, width) / width;
+                    } else {
+                        // 左右面使用Y坐标
+                        textureX = mod(positionMC.y, width) / width;
+                    }
+                    float textureY = mod(positionMC.z, height) / height;
+
+                    // 应用纹理
+                    vec3 rgb = texture(u_texture, vec2(textureX, textureY)).rgb;
+                    material.diffuse = rgb;
+
+                    // 科技网格线叠加
+                    float spacingXY = 15.0;
+                    float lineX = step(0.97, fract(positionMC.x / spacingXY));
+                    float lineY = step(0.97, fract(positionMC.y / spacingXY));
+                    float grid = max(lineX, lineY);
+
+                    // 动态扫描线效果
+                    float _baseHeight = 0.0;
+                    float _glowRange = 120.0;
+                    float vtxf_height = positionMC.z - _baseHeight;
+                    float vtxf_a13 = fract(czm_frameNumber / 360.0);
+                    float vtxf_h = clamp(vtxf_height / _glowRange, 0.0, 1.0);
+                    vtxf_a13 = abs(vtxf_a13 - 0.5) * 2.0;
+                    float vtxf_diff = step(0.02, abs(vtxf_h - vtxf_a13));
+
+                    // 混合网格和扫描线
+                    vec3 gridColor = vec3(0.0, 0.8, 1.0);
+                    material.diffuse = mix(material.diffuse, gridColor, grid * 0.3);
+                    material.diffuse += material.diffuse * (1.0 - vtxf_diff) * 0.5;
                 }
-                
-                // 最终颜色混合
-                vec3 finalColor = mix(baseColor, gridColor, grid * 0.5); // 网格半透明
-                finalColor = mix(finalColor, vec3(1.0, 1.0, 0.0), scan * 0.8); // 叠加扫描线
-                
-                material.diffuse = finalColor;
-                material.alpha = 0.9;
             }
         `
     });

@@ -1,9 +1,9 @@
 <!--
- * @Title: 
+ * @Title: 横向移动电子围栏
  * @Author: zhangzhiwei
  * @Date: 2026-02-08 17:45:22
  * @FilePath: \src\views\effects\electronicFence2.vue
- * @Description: 
+ * @Description: 横向移动电子围栏
 -->
 <template>
   <div class="effect-panel">

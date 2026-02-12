@@ -8,8 +8,7 @@
 <template>
   <div class="absolute top-4 left-4 bg-white p-4 rounded shadow z-10">
     <div class="mb-4 font-bold border-b pb-2">加载模型 (Entity)</div>
-    <div class="text-xs text-gray-500 mb-2">
-    </div>
+    <div class="text-xs text-gray-500 mb-2"></div>
     <div class="flex space-x-2">
       <el-button size="small" type="primary" @click="resetView"
         >重置视角</el-button
@@ -27,18 +26,14 @@ import { useCesiumCleanup } from "@/hooks/useCesiumCleanup";
 let viewer = null;
 let modelEntity = null;
 const modelUrl = "https://data.mars3d.cn/gltf/mars/feiji.glb";
+const position = Cesium.Cartesian3.fromDegrees(114.3055, 30.5928, 10000);
+const heading = Cesium.Math.toRadians(135);
+const pitch = 0;
+const roll = 0;
+const hpr = new Cesium.HeadingPitchRoll(heading, pitch, roll);
+const orientation = Cesium.Transforms.headingPitchRollQuaternion(position, hpr);
 
 const laodData = () => {
-  const position = Cesium.Cartesian3.fromDegrees(114.3055, 30.5928, 10000);
-  const heading = Cesium.Math.toRadians(135);
-  const pitch = 0;
-  const roll = 0;
-  const hpr = new Cesium.HeadingPitchRoll(heading, pitch, roll);
-  const orientation = Cesium.Transforms.headingPitchRollQuaternion(
-    position,
-    hpr,
-  );
-
   modelEntity = viewer.entities.add({
     name: "飞机模型",
     position: position,
@@ -61,8 +56,23 @@ onMounted(async () => {
 });
 
 const resetView = () => {
-  if (viewer && modelEntity) {
-    viewer.trackedEntity = modelEntity;
+  if (viewer) {
+    // 获取模型当前位置
+    if (modelEntity) {
+      // 定义初始的观察角度
+      const heading = Cesium.Math.toRadians(0); // 正北
+      const pitch = Cesium.Math.toRadians(-45); // 俯视45度
+      const range = 1000.0; // 距离模型1000米
+
+      // 使用 HeadingPitchRange 封装视角参数
+      const hpr = new Cesium.HeadingPitchRange(heading, pitch, range);
+
+      // 执行平滑飞行复原
+      viewer.flyTo(modelEntity, {
+        duration: 2.0, // 飞行耗时（秒）
+        offset: hpr, // 应用视角参数
+      });
+    }
   }
 };
 

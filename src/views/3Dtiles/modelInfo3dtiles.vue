@@ -34,11 +34,18 @@ const loadTileset = async () => {
     tileset = await Cesium.Cesium3DTileset.fromUrl(tilesetUrl, {
       maximumScreenSpaceError: 1,
     });
-    
+
+    // 调整模型高度，使其接地
+    const cartographic = Cesium.Cartographic.fromCartesian(tileset.boundingSphere.center);
+    const surface = Cesium.Cartesian3.fromRadians(cartographic.longitude, cartographic.latitude, 0.0);
+    const offset = Cesium.Cartesian3.fromRadians(cartographic.longitude, cartographic.latitude, -20.0);
+    const translation = Cesium.Cartesian3.subtract(offset, surface, new Cesium.Cartesian3());
+    tileset.modelMatrix = Cesium.Matrix4.fromTranslation(translation);
+
     viewer.scene.primitives.add(tileset);
-    
+
     await viewer.zoomTo(tileset);
-    
+
     viewer.camera.flyToBoundingSphere(tileset.boundingSphere, {
         offset: new Cesium.HeadingPitchRange(
             Cesium.Math.toRadians(0),
@@ -46,7 +53,7 @@ const loadTileset = async () => {
             tileset.boundingSphere.radius * 2.0
         )
     });
-    
+
     initInteraction();
 
   } catch (error) {

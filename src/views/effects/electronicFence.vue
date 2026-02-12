@@ -1,4 +1,10 @@
-
+<!--
+ * @Title: 电子围栏
+ * @Author: zhangzhiwei
+ * @Date: 2026-02-08 17:45:22
+ * @FilePath: \src\views\effects\electronicFence.vue
+ * @Description: 电子围栏
+-->
 <template>
   <div class="effect-panel">
     <h3>电子围栏 </h3>

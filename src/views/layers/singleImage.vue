@@ -25,7 +25,7 @@ async function addImageLayer() {
       },
     );
 
-    viewer.imageryLayers.addImageryProvider(provider);
+    imageryLayer.value = viewer.imageryLayers.addImageryProvider(provider);
     // 可选：飞行定位到该图片
     viewer.camera.flyTo({
       destination: Cesium.Rectangle.fromDegrees(110, 30, 120, 40),

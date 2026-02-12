@@ -94,48 +94,55 @@ const configureClustering = (ds) => {
 
   // 自定义聚集样式
   ds.clustering.clusterEvent.addEventListener((entities, cluster) => {
-    cluster.label.show = true;
-    cluster.label.text = entities.length.toLocaleString();
-    cluster.label.font = '16px sans-serif';
-    cluster.label.style = Cesium.LabelStyle.FILL_AND_OUTLINE;
-    cluster.label.fillColor = Cesium.Color.WHITE;
-    cluster.label.outlineColor = Cesium.Color.BLACK;
-    cluster.label.outlineWidth = 2;
-    cluster.label.verticalOrigin = Cesium.VerticalOrigin.CENTER; // 垂直居中
-    cluster.label.disableDepthTestDistance = Number.POSITIVE_INFINITY; // 确保文字不被遮挡
+    // 隐藏 label，因为数字已经绘制在圆圈上了
+    cluster.label.show = false;
 
     cluster.billboard.show = true;
-    cluster.billboard.id = cluster.label.id;
     cluster.billboard.verticalOrigin = Cesium.VerticalOrigin.CENTER;
+    cluster.billboard.horizontalOrigin = Cesium.HorizontalOrigin.CENTER;
     
-    // 根据数量改变颜色
+    // 根据数量改变颜色和大小
     if (entities.length >= 100) {
-        cluster.billboard.image = generateClusterCircle(Cesium.Color.RED, 40);
+        cluster.billboard.image = generateClusterCircle(Cesium.Color.RED, 44, entities.length);
     } else if (entities.length >= 50) {
-        cluster.billboard.image = generateClusterCircle(Cesium.Color.ORANGE, 35);
+        cluster.billboard.image = generateClusterCircle(Cesium.Color.ORANGE, 38, entities.length);
     } else {
-        cluster.billboard.image = generateClusterCircle(Cesium.Color.BLUE, 30);
+        cluster.billboard.image = generateClusterCircle(Cesium.Color.BLUE, 32, entities.length);
     }
   });
 };
 
-const generateClusterCircle = (color, size) => {
+const generateClusterCircle = (color, size, count) => {
+    // 增加画布尺寸，确保圆不会被裁剪
+    const canvasSize = size + 4;
     const canvas = document.createElement('canvas');
-    canvas.width = size;
-    canvas.height = size;
+    canvas.width = canvasSize;
+    canvas.height = canvasSize;
     const ctx = canvas.getContext('2d');
     
+    const center = canvasSize / 2;
+    const radius = size / 2;
+    
+    // 绘制圆
     ctx.beginPath();
-    ctx.arc(size/2, size/2, size/2, 0, Math.PI * 2);
+    ctx.arc(center, center, radius, 0, Math.PI * 2);
     ctx.fillStyle = color.toCssColorString();
     ctx.fill();
     
-    // 添加文字背景效果
+    // 添加白色边框
     ctx.beginPath();
-    ctx.arc(size/2, size/2, size/2 - 2, 0, Math.PI * 2);
+    ctx.arc(center, center, radius - 2, 0, Math.PI * 2);
     ctx.strokeStyle = 'white';
     ctx.lineWidth = 2;
     ctx.stroke();
+    
+    // 绘制数字
+    ctx.fillStyle = 'white';
+    ctx.font = `bold ${size * 0.4}px sans-serif`;
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    const text = count >= 1000 ? '999+' : count.toString();
+    ctx.fillText(text, center, center);
     
     return canvas;
 };

@@ -24,15 +24,17 @@ onMounted(() => {
   const viewer = store.viewer;
   if (!viewer) return;
 
-  const center = Cesium.Cartesian3.fromDegrees(116.39, 39.9);
+  // 武汉中心位置
+  const center = Cesium.Cartesian3.fromDegrees(114.3055, 30.5928);
   
   const robustRadarShader = `
     uniform sampler2D colorTexture;
     uniform sampler2D depthTexture;
-    varying vec2 v_textureCoordinates;
+    in vec2 v_textureCoordinates;
+    out vec4 fragColor;
     uniform vec4 u_scanCenterEC;
     uniform vec3 u_scanPlaneNormalEC;
-    uniform vec3 u_scanLineDirEC; // The current direction of the scan line
+    uniform vec3 u_scanLineDirEC;
     uniform float u_radius;
     uniform vec4 u_scanColor;
 
@@ -43,7 +45,7 @@ onMounted(() => {
       pos /= pos.w;
       return pos;
     }
-    
+
     vec3 pointProjectOnPlane(in vec3 planeNormal, in vec3 planeOrigin, in vec3 point){
         vec3 v01 = point - planeOrigin;
         float d = dot(planeNormal, v01);
@@ -51,38 +53,25 @@ onMounted(() => {
     }
 
     void main() {
-        gl_FragColor = texture2D(colorTexture, v_textureCoordinates);
+        fragColor = texture(colorTexture, v_textureCoordinates);
         float depth = czm_readDepth(depthTexture, v_textureCoordinates);
         vec4 viewPos = toEye(v_textureCoordinates, depth);
-        
+
         vec3 prjOnPlane = pointProjectOnPlane(u_scanPlaneNormalEC.xyz, u_scanCenterEC.xyz, viewPos.xyz);
         float dist = length(prjOnPlane - u_scanCenterEC.xyz);
 
         if(dist < u_radius){
             vec3 dir = normalize(prjOnPlane - u_scanCenterEC.xyz);
-            
-            // Calculate angle between current scan direction and point direction
-            // We use cross product to determine "side" (left/right) if needed, but dot product gives cos(theta)
+
             float dotVal = dot(dir, u_scanLineDirEC);
-            
-            // We also need to know if it's "behind" the scan line to render the trail
-            // To do this properly without branching, we need a "Right" vector (ScanDir x PlaneNormal)
+
             vec3 sideVec = cross(u_scanLineDirEC, u_scanPlaneNormalEC);
             float side = dot(dir, sideVec);
-            
-            // If side > 0, it is "behind" the scan line (assuming counter-clockwise rotation)
+
             if(side > 0.0){
-                float factor = smoothstep(0.0, 1.0, dotVal); // Map -1..1 to 0..1 roughly, but we want a sharp leading edge
-                
-                // Let's use the angle directly.
-                // dotVal is cos(theta). Theta goes from 0 to 180.
-                // If we are "behind", theta is 0..180.
-                // We want the trail to fade out as theta increases.
-                // So if side > 0, we mix color.
-                
-                float intensity = pow(dotVal, 5.0); // Sharpen the trail
-                if(dotVal > 0.0) { // Only the first 90 degrees behind
-                    gl_FragColor = mix(gl_FragColor, u_scanColor, intensity);
+                float intensity = pow(dotVal, 5.0);
+                if(dotVal > 0.0) {
+                    fragColor = mix(fragColor, u_scanColor, intensity);
                 }
             }
         }
@@ -123,7 +112,7 @@ onMounted(() => {
   viewer.scene.postProcessStages.add(stage);
   
   viewer.camera.flyTo({
-    destination: Cesium.Cartesian3.fromDegrees(116.39, 39.9, 3000)
+    destination: Cesium.Cartesian3.fromDegrees(114.3055, 30.5928, 3000)
   });
 });
 

@@ -16,7 +16,7 @@
   <div 
     v-show="showPopup && isVisible" 
     ref="popupRef" 
-    class="fixed bg-white p-4 rounded shadow-lg border border-gray-200 w-64 z-[9999] transform -translate-x-1/2 -translate-y-full mt-[-15px]"
+    class="popup-container"
     :style="{ top: popupPos.y + 'px', left: popupPos.x + 'px' }"
   >
     <div class="flex justify-between items-center mb-2 border-b pb-1">
@@ -26,7 +26,7 @@
     <div class="text-sm text-gray-600 leading-relaxed">{{ popupInfo.content }}</div>
     
     <!-- 三角箭头 -->
-    <div class="absolute bottom-[-6px] left-1/2 transform -translate-x-1/2 w-3 h-3 bg-white border-b border-r border-gray-200 rotate-45"></div>
+    <div class="popup-arrow"></div>
   </div>
 </template>
 
@@ -228,3 +228,31 @@ useCesiumCleanup(() => {
   }
 });
 </script>
+
+<style scoped>
+.popup-container {
+  position: fixed;
+  background-color: white;
+  padding: 16px;
+  border-radius: 8px;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  border: 1px solid #e5e7eb;
+  width: 256px;
+  z-index: 9999;
+  transform: translate(-50%, -100%);
+  margin-top: -10px;
+}
+
+.popup-arrow {
+  position: absolute;
+  bottom: -6px;
+  left: 50%;
+  transform: translateX(-50%) rotate(45deg);
+  width: 12px;
+  height: 12px;
+  background-color: white;
+  border-bottom: 1px solid #e5e7eb;
+  border-right: 1px solid #e5e7eb;
+  pointer-events: none;
+}
+</style>

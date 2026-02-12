@@ -1,15 +1,24 @@
+<!--
+ * @Title: 
+ * @Author: zhangzhiwei
+ * @Date: 2026-02-02 23:55:22
+ * @FilePath: \src\views\base\tip.vue
+ * @Description: 
+-->
 <template>
-  <div class="relative h-full w-full pointer-events-none" style="pointer-events: none">
+  <div class="tip-container">
     <div
       ref="tipRef"
-      class="absolute bg-white/90 text-gray-800 text-sm px-3 py-2 rounded shadow pointer-events-auto"
-      :class="{ 'opacity-0': !isVisible, 'opacity-100': isVisible }"
-      style="transform: translate(-50%, -100%); pointer-events: auto"
+      class="tip-box"
+      :class="{ 'tip-hidden': !isVisible, 'tip-visible': isVisible }"
     >
       你好
+      <div class="tip-arrow"></div>
     </div>
   </div>
 </template>
+
+
 
 <script setup>
 import { onMounted, onUnmounted, ref } from 'vue';
@@ -60,3 +69,48 @@ useCesiumCleanup(() => {
   }
 });
 </script>
+
+<style scoped>
+.tip-container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.tip-box {
+  position: absolute;
+  background-color: rgba(255, 255, 255, 0.9);
+  color: #333;
+  font-size: 14px;
+  padding: 8px 12px;
+  border-radius: 4px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  pointer-events: auto;
+  transform: translate(-50%, -100%);
+  transition: opacity 0.3s ease;
+}
+
+.tip-hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.tip-visible {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.tip-arrow {
+  position: absolute;
+  bottom: -8px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 0;
+  border-left: 8px solid transparent;
+  border-right: 8px solid transparent;
+  border-top: 8px solid rgba(255, 255, 255, 0.9);
+  pointer-events: none;
+}
+</style>
