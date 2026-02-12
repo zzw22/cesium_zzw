@@ -45,7 +45,6 @@ onMounted(() => {
       pos /= pos.w;
       return pos;
     }
-
     vec3 pointProjectOnPlane(in vec3 planeNormal, in vec3 planeOrigin, in vec3 point){
         vec3 v01 = point - planeOrigin;
         float d = dot(planeNormal, v01);

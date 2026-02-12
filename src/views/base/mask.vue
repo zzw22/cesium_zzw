@@ -73,7 +73,6 @@ onMounted(() => {
    viewer = useCesiumStore().viewer;
   if (!viewer) return;
   addMask();
-  console.log(viewer, 111);
 });
 useCesiumCleanup(() => {
   if (viewer) {

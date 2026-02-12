@@ -1,4 +1,3 @@
-
 <template>
   <div class="effect-panel">
     <h3>点光源效果</h3>

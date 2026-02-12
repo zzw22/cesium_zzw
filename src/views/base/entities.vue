@@ -65,6 +65,11 @@ useCesiumCleanup(() => {
     viewer.entities.removeAll();
   }
 });
+useCesiumCleanup(() => {
+  if (viewer) {
+    viewer.entities.removeAll();
+  }
+});
 </script>
 
 <style scoped>

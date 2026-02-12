@@ -53,7 +53,6 @@ const loadTileset = async () => {
             tileset.boundingSphere.radius * 2.0
         )
     });
-
     initInteraction();
 
   } catch (error) {

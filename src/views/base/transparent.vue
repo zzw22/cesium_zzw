@@ -49,7 +49,6 @@ const updateOpacity = (val) => {
     viewer.scene.globe.translucency.enabled = true;
     viewer.scene.globe.translucency.frontFaceAlpha = val;
     viewer.scene.globe.translucency.backFaceAlpha = val;
-
     // 如果想要完全透明时看到背景色，可能需要开启地下模式
     if (val < 1.0) {
       viewer.scene.screenSpaceCameraController.enableCollisionDetection = false; // 允许相机进入地下
