@@ -28,17 +28,16 @@ onMounted(() => {
 const loadMapboxLayer = async () => {
   try {
     // 动态加载配置文件（该文件被 .gitignore 忽略）
-    const config = await import("@/config.js");
-    const token = config.mapboxToken;
+    const {MAPBOX_TOKEN} = await import("@/token.js");
     
-    if (!token) {
+    if (!MAPBOX_TOKEN) {
       console.warn("Mapbox token 未配置");
       return;
     }
     
     const provider = new Cesium.UrlTemplateImageryProvider({
       credit: "Mapbox",
-      url: buildMapboxUrl(token),
+      url: buildMapboxUrl(MAPBOX_TOKEN),
     });
     
     viewer.imageryLayers.addImageryProvider(provider);
