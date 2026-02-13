@@ -28,7 +28,7 @@
 import { onMounted, onUnmounted, ref, watch } from "vue";
 import { useCesiumStore } from "@/store/cesiumStore";
 import * as Cesium from "cesium";
-import { CircleGradientMaterialProperty } from "@/utils/cesium/CircleGradientMaterialProperty.js";
+import { CircleGradientMaterialProperty } from "@/utils/cesium";
 
 const store = useCesiumStore();
 let tileset = null;

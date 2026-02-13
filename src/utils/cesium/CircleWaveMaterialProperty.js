@@ -27,7 +27,7 @@ function createPropertyDescriptor(name) {
   };
 }
 
-export class CircleWaveMaterialProperty {
+export default class CircleWaveMaterialProperty {
   constructor(options = {}) {
     this._definitionChanged = new Cesium.Event();
     

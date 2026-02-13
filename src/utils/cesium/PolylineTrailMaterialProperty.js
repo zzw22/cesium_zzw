@@ -8,7 +8,7 @@ function defaultValue(a, b) {
   return b;
 }
 
-export class PolylineTrailMaterialProperty {
+export default class PolylineTrailMaterialProperty {
   constructor(options = {}) {
     this._definitionChanged = new Cesium.Event();
     
@@ -144,4 +144,4 @@ function createTrailImage() {
 Cesium.Material.PolylineTrailLinkImage = createTrailImage();
 
 // 修正 source 中的 shader
-// 注意：上面的 source 用了 texture2D(image, ...)，我们需要确保 image uniform 被正确传入
+// 注意：texture2D 已被 texture 替换，确保 image uniform 被正确传入

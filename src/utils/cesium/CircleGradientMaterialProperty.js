@@ -34,7 +34,7 @@ function createPropertyDescriptor(name) {
   };
 }
 
-export class CircleGradientMaterialProperty {
+export default class CircleGradientMaterialProperty {
   constructor(color) {
     this._definitionChanged = new Cesium.Event();
     this._color = undefined;

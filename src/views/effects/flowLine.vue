@@ -8,128 +8,198 @@
 <template>
   <div class="effect-panel">
     <h3>流动线</h3>
-    <el-button @click="toggleEffect">切换显示</el-button>
+    <el-button @click="toggleEffect">{{ isVisible ? '隐藏' : '显示' }}</el-button>
   </div>
 </template>
 
 <script setup>
-import { onMounted, onUnmounted, ref } from 'vue';
-import { useCesiumStore } from '@/store/cesiumStore';
-import * as Cesium from 'cesium';
+import { onMounted, onUnmounted, ref } from "vue";
+import { useCesiumStore } from "@/store/cesiumStore";
+import * as Cesium from "cesium";
+import {
+  PolylineLinkPulseMaterialProperty,
+  PolylineArrowMaterialProperty,
+  PolylineTrialFlowMaterialProperty,
+} from "@/utils/cesium";
+
+// 导入材质图片
+import LinkPulseImg from "@/assets/images/polylinematerial/LinkPulse.png";
+import ArrowOpacityImg from "@/assets/images/polylinematerial/arrowopacity.png";
 
 const store = useCesiumStore();
-let entity = null;
+let viewer = null;
+let isVisible = ref(true);
+let entities = []; // 存储所有创建的实体
 
+// 武汉中心坐标 (经度, 纬度)
+const wuhanCenter = [114.3055, 30.5928];
+
+// 将经纬度数组转换为 Cartesian3 坐标
+const degreesToCartesian = (lon, lat, height = 0) => {
+  return Cesium.Cartesian3.fromDegrees(lon, lat, height);
+};
+
+// 创建武汉的线数据
+const createWuhanLines = () => {
+  // 脉冲线 - 从武汉中心向两个方向延伸
+  const linkPulseLines = [
+    [
+      degreesToCartesian(wuhanCenter[0] - 0.05, wuhanCenter[1] + 0.02),
+      degreesToCartesian(wuhanCenter[0], wuhanCenter[1] + 0.02),
+      degreesToCartesian(wuhanCenter[0] + 0.05, wuhanCenter[1] + 0.02),
+    ],
+    [
+      degreesToCartesian(wuhanCenter[0] - 0.05, wuhanCenter[1] - 0.02),
+      degreesToCartesian(wuhanCenter[0], wuhanCenter[1] - 0.02),
+      degreesToCartesian(wuhanCenter[0] + 0.05, wuhanCenter[1] - 0.02),
+    ],
+  ];
+
+  // 尾迹流动线 - 从武汉中心向两个方向延伸
+  const trialFlowLines = [
+    [
+      degreesToCartesian(wuhanCenter[0] - 0.05, wuhanCenter[1] + 0.06),
+      degreesToCartesian(wuhanCenter[0], wuhanCenter[1] + 0.06),
+      degreesToCartesian(wuhanCenter[0] + 0.05, wuhanCenter[1] + 0.06),
+    ],
+    [
+      degreesToCartesian(wuhanCenter[0] - 0.05, wuhanCenter[1] - 0.06),
+      degreesToCartesian(wuhanCenter[0], wuhanCenter[1] - 0.06),
+      degreesToCartesian(wuhanCenter[0] + 0.05, wuhanCenter[1] - 0.06),
+    ],
+  ];
+
+  // 箭头线 - 从武汉中心向两个方向延伸
+  const arrowLines = [
+    [
+      degreesToCartesian(wuhanCenter[0] - 0.05, wuhanCenter[1] + 0.10),
+      degreesToCartesian(wuhanCenter[0] + 0.05, wuhanCenter[1] + 0.10),
+    ],
+    [
+      degreesToCartesian(wuhanCenter[0] - 0.05, wuhanCenter[1] - 0.10),
+      degreesToCartesian(wuhanCenter[0] + 0.05, wuhanCenter[1] - 0.10),
+    ],
+  ];
+
+  return { linkPulseLines, trialFlowLines, arrowLines };
+};
+
+// 清除所有实体
+const clearEntities = () => {
+  if (!viewer) return;
+  entities.forEach(entity => {
+    viewer.entities.remove(entity);
+  });
+  entities = [];
+};
+
+// 添加所有流动线
+const addData = () => {
+  if (!viewer) return;
+  
+  // 先清除已有实体
+  clearEntities();
+  
+  const { linkPulseLines, trialFlowLines, arrowLines } = createWuhanLines();
+  
+  addPolylineLinkPulse(linkPulseLines);
+  addPolylineTrialFlow(trialFlowLines);
+  addPolylineArrowOpacity(arrowLines);
+  
+  // 飞行到武汉
+  viewer.camera.flyTo({
+    destination: Cesium.Cartesian3.fromDegrees(wuhanCenter[0], wuhanCenter[1]-0.40, 50000),
+    orientation: {
+      heading: Cesium.Math.toRadians(0),
+      pitch: Cesium.Math.toRadians(-45),
+      roll: 0,
+    },
+  });
+};
+
+// 脉冲线
+const addPolylineLinkPulse = (lines) => {
+  let colors = [Cesium.Color.RED, Cesium.Color.AQUA];
+  lines.forEach((item, index) => {
+    const entity = viewer.entities.add({
+      polyline: {
+        positions: item,
+        width: 8,
+        material: new PolylineLinkPulseMaterialProperty({
+          color: colors[index],
+          duration: 10000,
+          url: LinkPulseImg,
+        }),
+        clampToGround: true,
+      },
+    });
+    entities.push(entity);
+  });
+};
+
+// 尾迹流动线
+const addPolylineTrialFlow = (lines) => {
+  let colors = [Cesium.Color.RED, Cesium.Color.AQUA];
+  lines.forEach((item, index) => {
+    const entity = viewer.entities.add({
+      polyline: {
+        positions: item,
+        width: 8,
+        material: new PolylineTrialFlowMaterialProperty({
+          color: colors[index],
+          duration: 2000,
+        }),
+        clampToGround: true,
+      },
+    });
+    entities.push(entity);
+  });
+};
+
+// 箭头线
+const addPolylineArrowOpacity = (lines) => {
+  let colors = [Cesium.Color.YELLOW, Cesium.Color.AQUA];
+  lines.forEach((item, index) => {
+    const entity = viewer.entities.add({
+      polyline: {
+        positions: item,
+        width: 8,
+        material: new PolylineArrowMaterialProperty({
+          color: colors[index],
+          duration: 800,
+          count: 3,
+          url: ArrowOpacityImg,
+        }),
+        clampToGround: true,
+      },
+    });
+    entities.push(entity);
+  });
+};
+
+// 切换显示/隐藏
 const toggleEffect = () => {
-  if (entity) {
-    entity.show = !entity.show;
+  isVisible.value = !isVisible.value;
+  if (isVisible.value) {
+    addData();
+  } else {
+    clearEntities();
   }
 };
 
-// 定义 MaterialProperty
-class PolylineFlowMaterialProperty {
-  constructor(options) {
-    this._definitionChanged = new Cesium.Event();
-    this._color = undefined;
-    this._speed = undefined;
-    this._percent = undefined;
-    this.color = options.color;
-    this.speed = options.speed;
-    this.percent = options.percent;
-  }
-
-  get isConstant() { return false; }
-  get definitionChanged() { return this._definitionChanged; }
-  getType(time) { return 'PolylineFlow'; }
-  getValue(time, result) {
-    if (!Cesium.defined(result)) {
-      result = {};
-    }
-    result.color = Cesium.Property.getValueOrClonedDefault(this._color, time, Cesium.Color.WHITE, result.color);
-    result.speed = Cesium.Property.getValueOrDefault(this._speed, time, 1.0, result.speed);
-    result.percent = Cesium.Property.getValueOrDefault(this._percent, time, 0.03, result.percent);
-    return result;
-  }
-  equals(other) {
-    return this === other || (other instanceof PolylineFlowMaterialProperty && Cesium.Property.equals(this._color, other._color) && Cesium.Property.equals(this._speed, other._speed));
-  }
-}
-
-Object.defineProperties(PolylineFlowMaterialProperty.prototype, {
-  color: Cesium.createPropertyDescriptor('color'),
-  speed: Cesium.createPropertyDescriptor('speed'),
-  percent: Cesium.createPropertyDescriptor('percent')
-});
-
 onMounted(() => {
-  const viewer = store.viewer;
+  viewer = store.viewer;
   if (!viewer) return;
-
-  // 自定义材质
-  if (!Cesium.Material.PolylineFlowType) {
-    Cesium.Material.PolylineFlowType = 'PolylineFlow';
-    Cesium.Material._materialCache.addMaterial(Cesium.Material.PolylineFlowType, {
-      fabric: {
-        type: Cesium.Material.PolylineFlowType,
-        uniforms: {
-          color: new Cesium.Color(0.0, 1.0, 1.0, 1.0),
-          speed: 1.0,
-          percent: 0.03,
-          gradient: 0.1
-        },
-        source: `
-          uniform vec4 color;
-          uniform float speed;
-          uniform float percent;
-          uniform float gradient;
-          
-          czm_material czm_getMaterial(czm_materialInput materialInput){
-            czm_material material = czm_getDefaultMaterial(materialInput);
-            vec2 st = materialInput.st;
-            float t = fract(czm_frameNumber * speed / 1000.0);
-            t *= (1.0 + percent);
-            float alpha = smoothstep(t- percent, t, st.s) * step(-t, -st.s);
-            alpha += smoothstep(t- percent, t, st.s - 1.0) * step(-t, -(st.s - 1.0));
-            material.diffuse = color.rgb;
-            material.alpha = alpha * color.a;
-            return material;
-          }
-        `
-      },
-      translucent: true
-    });
-  }
-
-  entity = viewer.entities.add({
-    name: 'FlowLine',
-    polyline: {
-      positions: Cesium.Cartesian3.fromDegreesArrayHeights([
-        114.3055, 30.5928, 0,
-        114.3255, 30.6128, 0,
-        114.3455, 30.5928, 0
-      ]),
-      width: 5,
-      material: new PolylineFlowMaterialProperty({
-        color: new Cesium.Color(0.0, 1.0, 1.0, 1.0),
-        speed: 2.0,
-        percent: 0.15
-      })
-    }
-  });
-
-  viewer.zoomTo(entity);
+  addData();
 });
 
 onUnmounted(() => {
-  const viewer = store.viewer;
-  if (viewer && entity) {
-    viewer.entities.remove(entity);
-  }
+  clearEntities();
 });
 </script>
 
 <style scoped>
-.effect-panel {
+.effect-panel { 
   position: absolute;
   top: 10px;
   left: 10px;

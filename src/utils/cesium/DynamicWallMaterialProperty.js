@@ -62,7 +62,7 @@ function _getDirectionWallShader(options) {
   }
 }
 
-export class DynamicWallMaterialProperty {
+export default class DynamicWallMaterialProperty {
   constructor(options) {
     options = defaultValue(options, {});
     this._definitionChanged = new Cesium.Event();

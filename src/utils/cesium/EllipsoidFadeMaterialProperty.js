@@ -27,7 +27,7 @@ function createPropertyDescriptor(name) {
   };
 }
 
-export class EllipsoidFadeMaterialProperty {
+export default class EllipsoidFadeMaterialProperty {
   constructor(color, duration) {
     this._definitionChanged = new Cesium.Event();
     this._color = undefined;

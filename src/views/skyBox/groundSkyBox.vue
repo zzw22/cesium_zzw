@@ -26,7 +26,7 @@ let originalBackgroundSize;
 
 const addInfo = () => {
     // 保存原始状态
-    originalSkyBoxShow = viewer.scene.skyBox.show;
+    originalSkyBoxShow = viewer.scene.skyBox?.show || false;
     originalBackgroundColor = viewer.scene.backgroundColor.clone();
     originalBackgroundImage = viewer.scene.canvas.style.backgroundImage;
     originalBackgroundSize = viewer.scene.canvas.style.backgroundSize;
