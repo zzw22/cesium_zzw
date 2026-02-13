@@ -1,35 +1,59 @@
 <!--
- * @Title: 
+ * @Title: Mapbox 卫星地图
  * @Author: zhangzhiwei
- * @Date: 2026-02-04 16:55:35
- * @FilePath: \src\views\layers\mkt.vue
- * @Description: 
+ * @Date: 2026-02-04
+ * @Description: Mapbox 卫星地图示例 - 需要配置密钥
 -->
 <template>
-  <div class="bg-white h-20"></div>
+  <div class="demo_panel">
+    <h3 class="demo_title">Mapbox 卫星地图</h3>
+    <p class="text-sm text-gray-500">请在 config.js 中配置密钥</p>
+  </div>
 </template>
 
 <script setup>
 import { onMounted } from "vue";
 import { useCesiumStore } from "@/store/cesiumStore";
 import * as Cesium from "cesium";
+import { useCesiumCleanup } from "@/hooks/useCesiumCleanup";
+
 let viewer;
-const addInfo = () => {
-  // 加载xyz
-  const xyz = new Cesium.UrlTemplateImageryProvider({
-    credit: "mapbox",
-    url: "https://api.mapbox.com/v4/mapbox.satellite/{z}/{x}/{y}.webp?sku=1016Ab1dNMw2X&access_token=pk.eyJ1IjoidHJhbXBqd2wiLCJhIjoiY2xhYXIxbHExMDN3dzN3cGliOHdrMThxMiJ9.6er2aYb1EBjSsK1-t9d2-w",
-  });
-  viewer.imageryLayers.addImageryProvider(xyz);
-};
+
 onMounted(() => {
   viewer = useCesiumStore().viewer;
   if (!viewer) return;
-  addInfo();
+  loadMapboxLayer();
 });
 
-import { useCesiumCleanup } from "@/hooks/useCesiumCleanup";
+const loadMapboxLayer = async () => {
+  try {
+    // 动态加载配置文件（该文件被 .gitignore 忽略）
+    const config = await import("@/config.js");
+    const token = config.mapboxToken;
+    
+    if (!token) {
+      console.warn("Mapbox token 未配置");
+      return;
+    }
+    
+    const provider = new Cesium.UrlTemplateImageryProvider({
+      credit: "Mapbox",
+      url: buildMapboxUrl(token),
+    });
+    
+    viewer.imageryLayers.addImageryProvider(provider);
+  } catch (err) {
+    console.error("加载 Mapbox 图层失败:", err);
+  }
+};
+
+// 构建 Mapbox URL
+const buildMapboxUrl = (token) => {
+  const params = new URLSearchParams({ access_token: token });
+  return `https://api.mapbox.com/v4/mapbox.satellite/{z}/{x}/{y}.webp?${params}`;
+};
+
 useCesiumCleanup(() => {
-  // 使用 store.resetViewer 统一清理（组件卸载时调用）
+  // 清理逻辑
 });
 </script>
