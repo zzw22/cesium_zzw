@@ -95,14 +95,27 @@ useCesiumCleanup(() => {
 const addPoint = (pos) => {
   const e = viewer.entities.add({
     position: pos,
-    point: { pixelSize: 8, color: Cesium.Color.YELLOW },
+    point: { 
+      pixelSize: 8, 
+      color: Cesium.Color.YELLOW,
+      disableDepthTestDistance: Number.POSITIVE_INFINITY 
+    },
   });
   drawEntities.push(e);
 };
 
 const addPolyline = (positions, color, clamp = false) => {
+  const polylineOpts = { 
+    positions, 
+    width: 2, 
+    material: color, 
+    clampToGround: clamp 
+  };
+  if (!clamp) {
+    polylineOpts.depthFailMaterial = color;
+  }
   const e = viewer.entities.add({
-    polyline: { positions, width: 2, material: color, clampToGround: clamp },
+    polyline: polylineOpts,
   });
   drawEntities.push(e);
 };
@@ -129,6 +142,7 @@ const labelAt = (pos, text) => {
       outlineColor: Cesium.Color.BLACK,
       outlineWidth: 2,
       pixelOffset: new Cesium.Cartesian2(0, -18),
+      disableDepthTestDistance: Number.POSITIVE_INFINITY,
     },
   });
   resultEntities.push(e);

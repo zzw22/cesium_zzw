@@ -22,7 +22,7 @@
 
 
 <script setup>
-import { onMounted, onUnmounted, ref } from 'vue';
+import { onMounted, onUnmounted, ref, watch } from 'vue';
 import { useCesiumStore } from '@/store/cesiumStore';
 import * as Cesium from 'cesium';
 import { useCesiumCleanup } from '@/hooks/useCesiumCleanup';
@@ -53,14 +53,32 @@ const updateTipPosition = () => {
   tipRef.value.style.top = `${canvasPosition.y}px`;
 };
 
-onMounted(() => {
-  viewer = useCesiumStore().viewer;
-  if (!viewer) return;
+const store = useCesiumStore();
+
+const init = (v) => {
+  if (!v) return;
+  viewer = v;
   viewer.camera.flyTo({
     destination: Cesium.Cartesian3.fromDegrees(114.3055, 30.5928, 5000),
     duration: 1.2
   });
+  // 先移除旧的监听器，防止重复添加
+  if (removeListener) {
+    removeListener();
+  }
   removeListener = viewer.scene.postRender.addEventListener(updateTipPosition);
+};
+
+onMounted(() => {
+  if (store.viewer) {
+    init(store.viewer);
+  }
+});
+
+watch(() => store.viewer, (newViewer) => {
+  if (newViewer) {
+    init(newViewer);
+  }
 });
 
 useCesiumCleanup(() => {
@@ -85,6 +103,7 @@ useCesiumCleanup(() => {
   pointer-events: auto;
   transform: translate(-50%, -100%);
   transition: opacity 0.3s ease;
+  width: max-content;
 }
 
 .tip-hidden {
