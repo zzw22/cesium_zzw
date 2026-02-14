@@ -1,0 +1,70 @@
+.LocationPlot-container {
+    min-height: 65px;
+    min-width: 186px;
+    background: rgba(20, 20, 20, 0.8);
+    position: absolute;
+    left: 0px;
+    bottom: 0px;
+    cursor: default;
+    padding: 8px;
+    border: 1px solid #409eff;
+    border-radius: 4px;
+    color: white;
+    font-size: 12px;
+    z-index: 999;
+    pointer-events: auto;
+    box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.5);
+}
+
+.LocationPlot-container::before {
+    position: absolute;
+    content: "";
+    left: 50%;
+    bottom: -30px;
+    height: 30px;
+    border-left: 2px dashed #409eff;
+    pointer-events: none;
+    transform: translateX(-50%);
+}
+
+.LocationPlot-container .info-item-close {
+    position: relative;
+    height: 18px;
+    margin-bottom: 5px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.LocationPlot-container .info-close {
+    display: block;
+    height: 16px;
+    width: 16px;
+    position: absolute;
+    right: 0px;
+    top: 0px;
+    background: rgba(255, 0, 0, 0.6);
+    line-height: 14px;
+    text-align: center;
+    border-radius: 50%;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.LocationPlot-container .info-close:hover {
+    background: rgba(255, 0, 0, 0.9);
+}
+
+.LocationPlot-container .info-item {
+    line-height: 20px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.LocationPlot-container .info-label {
+    white-space: nowrap;
+}
+
+.LocationPlot-container .info-value {
+    color: #409eff;
+    font-weight: bold;
+    margin-left: 5px;
+}

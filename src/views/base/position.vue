@@ -1,46 +1,15 @@
 <template>
   <div class="demo_panel">
-    <h3 class="demo_title">坐标信息</h3>
-    <div class="position-info">
-      <div class="position-item">
-        <label>屏幕坐标:</label>
-        <span id="screen-position">{{
-          formatScreenPosition(screenPosition)
-        }}</span>
-      </div>
-      <div class="position-item">
-        <label
-          >椭球面坐标:<span>（不包含地形、模型、倾斜摄影表面。）</span></label
-        >
-        <span id="ellipsoid-position">{{
-          formatCartesian3(ellipsoidPosition)
-        }}</span>
-        <div v-if="ellipsoidPosition" class="latlng-info">
-          ({{ formatLatLng(ellipsoidPosition) }})
-        </div>
-      </div>
-      <div class="position-item">
-        <label
-          >场景坐标:<span>（包含了地形、倾斜摄影表面、模型的坐标）</span></label
-        >
-        <span id="scene-position">{{ formatCartesian3(scenePosition) }}</span>
-        <div v-if="scenePosition" class="latlng-info">
-          ({{ formatLatLng(scenePosition) }})
-        </div>
-      </div>
-      <div class="position-item">
-        <label
-          >地表坐标:<span
-            >（这里是地球表面的世界坐标，包含地形，不包括模型、倾斜摄影表面。）</span
-          ></label
-        >
-        <span id="terrain-position">{{
-          formatCartesian3(terrainPosition)
-        }}</span>
-        <div v-if="terrainPosition" class="latlng-info">
-          ({{ formatLatLng(terrainPosition) }})
-        </div>
-      </div>
+    <h3 class="demo_title">位置信息</h3>
+    <div class="control-panel">
+      <button
+        class="cesium-button"
+        @click="togglePick"
+        :class="{ active: isPicking }"
+      >
+        {{ isPicking ? "停止拾取" : "开始拾取" }}
+      </button>
+      <button class="cesium-button" @click="clearAll">清空所有</button>
     </div>
   </div>
 </template>
@@ -48,159 +17,127 @@
 <script setup>
 import { onMounted, onUnmounted, ref } from "vue";
 import { useCesiumStore } from "@/store/cesiumStore";
+import PositionPick from "@/utils/cesium/PositionPick";
 import * as Cesium from "cesium";
-import Transform from "@/utils/transform";
+import circleIcon from "@/assets/images/circleIcon.png";
 
-import { useCesiumCleanup } from "@/hooks/useCesiumCleanup";
+let viewer;
+let handler;
+const isPicking = ref(false);
+const pickInstances = ref([]);
 
-let viewer = null;
-
-let screenPosition = ref(null);
-let ellipsoidPosition = ref(null);
-let scenePosition = ref(null);
-let terrainPosition = ref(null);
-
-const addBaseData = () => {
-  viewer.scene.globe.depthTestAgainstTerrain = true;
-  viewer.camera.flyTo({
-    destination: Cesium.Cartesian3.fromDegrees(114.3055, 30.5928, 50000), // 武汉经纬度
-    orientation: {
-      heading: Cesium.Math.toRadians(0),
-      pitch: Cesium.Math.toRadians(-90),
-      roll: 0,
-    },
-  });
+const togglePick = () => {
+  isPicking.value = !isPicking.value;
+  if (isPicking.value) {
+    initHandler();
+  } else {
+    destroyHandler();
+  }
 };
 
-// 格式化屏幕坐标
-const formatScreenPosition = (position) => {
-  if (!position) return "点击地图获取";
-  return `x: ${position.x.toFixed(2)}, y: ${position.y.toFixed(2)}`;
-};
+const initHandler = () => {
+  if (handler) return;
+  handler = new Cesium.ScreenSpaceEventHandler(viewer.scene.canvas);
+  // Picking logic on click
+  handler.setInputAction((movement) => {
+    if (!isPicking.value) return;
 
-// 格式化笛卡尔坐标
-const formatCartesian3 = (position) => {
-  if (!position) return "点击地图获取";
-  return `x: ${position.x.toFixed(6)}, y: ${position.y.toFixed(6)}, z: ${position.z.toFixed(6)}`;
-};
-
-// 格式化经纬度坐标
-const formatLatLng = (cartesian3) => {
-  if (!cartesian3) return "";
-  const cartographic = Cesium.Cartographic.fromCartesian(cartesian3);
-  const lat = Cesium.Math.toDegrees(cartographic.latitude);
-  const lng = Cesium.Math.toDegrees(cartographic.longitude);
-  const height = cartographic.height || 0;
-  return `经度: ${lng.toFixed(6)}, 纬度: ${lat.toFixed(6)}, 高度: ${height.toFixed(2)}m`;
-};
-
-const getPosition = (viewer) => {
-  const handler = new Cesium.ScreenSpaceEventHandler(viewer.scene.canvas);
-  handler.setInputAction(function (movement) {
-    // 1、屏幕坐标
-    screenPosition.value = movement.position;
-
-    // 2、椭球面坐标（不包含地形、模型、倾斜摄影表面。）
-    const position1 = viewer.scene.camera.pickEllipsoid(
-      movement.position,
-      viewer.scene.globe.ellipsoid,
-    );
-    if (position1) {
-      ellipsoidPosition.value = position1;
-    } else {
-      ellipsoidPosition.value = null;
+    // Prevent picking if we clicked on an existing UI element or entity if needed
+    const pickedObject = viewer.scene.pick(movement.position);
+    if (
+      Cesium.defined(pickedObject) &&
+      pickedObject.id &&
+      pickedObject.id.type === "PositionPick"
+    ) {
+      return;
     }
 
-    // 3、场景坐标（包含了地形、倾斜摄影表面、模型的坐标）
-    const position2 = viewer.scene.pickPosition(movement.position);
-    scenePosition.value = position2;
+    // Strategy:
+    // 1. If we picked a 3D object (Model, 3DTiles), use pickPosition for accurate surface
+    // 2. Otherwise (Terrain/Globe), use globe.pick (ray intersection) which is more stable for ground
 
-    // 4、地表坐标（这里是地球表面的世界坐标，包含地形，不包括模型、倾斜摄影表面。）
-    const ray = viewer.camera.getPickRay(movement.position);
-    const position3 = viewer.scene.globe.pick(ray, viewer.scene);
-    terrainPosition.value = position3;
+    let pickPos;
+    if (Cesium.defined(pickedObject)) {
+      // Picked a model or 3D tile
+      pickPos = viewer.scene.pickPosition(movement.position);
+    }
+
+    // If no model picked or pickPosition failed, try globe pick
+    if (!pickPos) {
+      const ray = viewer.camera.getPickRay(movement.position);
+      pickPos = viewer.scene.globe.pick(ray, viewer.scene);
+    }
+
+    if (pickPos) {
+      addPositionPick(pickPos);
+    }
   }, Cesium.ScreenSpaceEventType.LEFT_CLICK);
-
-  // 扩展获取当前鼠标移动的位置
-  handler.setInputAction(function (movement) {
-    // 获取当前坐标
-    console.log(
-      Transform.getCurrentMousePosition(
-        viewer.scene,
-        movement.endPosition,
-        null,
-      ),
-      "当前鼠标位置",
-    );
-    // 获取当前坐标并转换为经纬度
-    console.log(
-      Transform.cartesian3To(
-        Transform.getCurrentMousePosition(
-          viewer.scene,
-          movement.endPosition,
-          null,
-        ),
-        viewer,
-      ).latlng,
-      "当前鼠标位置经纬度",
-    );
-  }, Cesium.ScreenSpaceEventType.MOUSE_MOVE);
-
-  return handler;
 };
 
-let handler = null;
-
-onMounted(() => {
-  viewer = useCesiumStore().viewer;
-  if (!viewer) return;
-  addBaseData();
-  handler = getPosition(viewer);
-});
-
-useCesiumCleanup(() => {
-    if (viewer) {
-    viewer.entities.removeAll();
-  }
+const destroyHandler = () => {
   if (handler) {
     handler.destroy();
+    handler = null;
   }
+};
+
+const addPositionPick = (position) => {
+  const instance = new PositionPick(viewer, position, {
+    onRemove: (inst) => {
+      const index = pickInstances.value.indexOf(inst);
+      if (index > -1) {
+        pickInstances.value.splice(index, 1);
+      }
+    },
+    imgUrl: circleIcon,
+    width:22,
+    height:22,
+  });
+  pickInstances.value.push(instance);
+};
+
+const clearAll = () => {
+  // Create a copy of the array to iterate because remove() modifies the original array via callback
+  [...pickInstances.value].forEach((inst) => inst.remove());
+  pickInstances.value = [];
+};
+
+onMounted(async () => {
+  viewer = useCesiumStore().viewer;
+  const terrainProvider =
+    await Cesium.ArcGISTiledElevationTerrainProvider.fromUrl(
+      "https://elevation3d.arcgis.com/arcgis/rest/services/WorldElevation3D/Terrain3D/ImageServer",
+    );
+  viewer.terrainProvider = terrainProvider;
+});
+
+onUnmounted(() => {
+  destroyHandler();
+  clearAll();
 });
 </script>
 
 <style scoped>
-
-.position-info {
+.control-panel {
+  margin-top: 10px;
   display: flex;
-  flex-direction: column;
   gap: 10px;
 }
-
-.position-item {
-  display: flex;
-  flex-direction: column;
-  gap: 5px;
+.cesium-button {
+  background: rgba(42, 42, 42, 0.8);
+  border: 1px solid #444;
+  color: #fff;
+  padding: 5px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.3s;
 }
-
-.position-item label {
-  font-weight: bold;
-  font-size: 14px;
-  color: #333;
+.cesium-button:hover {
+  background: rgba(60, 60, 60, 0.8);
+  border-color: #666;
 }
-
-.position-item span {
-  font-family: monospace;
-  font-size: 12px;
-  color: #666;
-  word-break: break-all;
-}
-
-.latlng-info {
-  font-family: monospace;
-  font-size: 11px;
-  color: #999;
-  margin-top: 2px;
-  padding-left: 10px;
-  border-left: 2px solid #eee;
+.cesium-button.active {
+  background: #409eff;
+  border-color: #409eff;
 }
 </style>
