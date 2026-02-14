@@ -259,7 +259,8 @@ const allRoutes = computed(() => {
       // Handle Home route
       if (path === "") path = "/";
       
-      if (route.meta && route.meta.title) {
+      // Only add to options if it's a leaf node (no children)
+      if ((!route.children || route.children.length === 0) && route.meta && route.meta.title) {
         options.push({
           value: t(route.meta.title),
           path: path
