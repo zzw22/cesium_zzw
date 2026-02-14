@@ -2,14 +2,13 @@
   <div class="demo_panel">
     <h3 class="demo_title">位置信息</h3>
     <div class="control-panel">
-      <button
-        class="cesium-button"
+      <el-button
         @click="togglePick"
-        :class="{ active: isPicking }"
+        :type="isPicking ? 'primary' : ''"
       >
         {{ isPicking ? "停止拾取" : "开始拾取" }}
-      </button>
-      <button class="cesium-button" @click="clearAll">清空所有</button>
+      </el-button>
+      <el-button  @click="clearAll">清空所有</el-button>
     </div>
   </div>
 </template>
@@ -122,22 +121,5 @@ onUnmounted(() => {
   margin-top: 10px;
   display: flex;
   gap: 10px;
-}
-.cesium-button {
-  background: rgba(42, 42, 42, 0.8);
-  border: 1px solid #444;
-  color: #fff;
-  padding: 5px 12px;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: all 0.3s;
-}
-.cesium-button:hover {
-  background: rgba(60, 60, 60, 0.8);
-  border-color: #666;
-}
-.cesium-button.active {
-  background: #409eff;
-  border-color: #409eff;
 }
 </style>
