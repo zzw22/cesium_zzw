@@ -5,8 +5,8 @@
  * @Description: 演示 ArcGIS 地形数据与动态调整地形夸张程度
 -->
 <template>
-  <div class="absolute top-4 left-4 bg-white p-4 rounded shadow z-10 w-80">
-    <div class="text-lg font-bold mb-4">地形图加载</div>
+  <div class="demo_panel">
+    <h3 class="demo_title">地形图加载</h3>
     <div class="mb-2">
       <div class="flex justify-between text-sm mb-1">
         <span>地形夸张程度</span>

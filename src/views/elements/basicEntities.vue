@@ -3,8 +3,8 @@
  * @Description: 演示 Point, Polyline, Polygon 的添加
 -->
 <template>
-  <div class="add-panel">
-    <div class="title">基础实体示例</div>
+  <div class="demo_panel">
+    <div class="demo_title">基础实体示例</div>
     <div class="button-group">
       <el-button class="tip-button" size="small" @click="addPoint">添加点 (Point)</el-button>
       <el-button class="tip-button" size="small" @click="addLine">添加线 (Polyline)</el-button>
@@ -94,16 +94,6 @@ useCesiumCleanup(() => {
 </script>
 
 <style scoped>
-.add-panel {
-  position: absolute;
-  top: 10px;
-  left: 10px;
-  background-color: rgba(255, 255, 255, 1);
-  padding: 15px;
-  border-radius: 5px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-  width: 300px;
-}
 .title {
   font-size: 18px;
   font-weight: bold;

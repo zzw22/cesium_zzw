@@ -3,9 +3,9 @@
  * @Description: 演示使用 Billboard 加载图标和 PinBuilder
 -->
 <template>
-  <div class="absolute top-4 left-4 bg-white p-4 rounded shadow z-10">
-    <div class="mb-2 font-bold">图标示例</div>
-    <div class="flex gap-2">
+  <div class="demo_panel">
+    <div class="demo_title">图标示例</div>
+    <div class="button-group">
       <el-button size="small" @click="addBillboard">添加图标</el-button>
       <el-button size="small" @click="addPin">添加 Pin</el-button>
       <el-button size="small" type="danger" @click="clear">清除</el-button>

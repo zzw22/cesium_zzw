@@ -6,8 +6,8 @@
  * @Description: 自动移动的圆锥体
 -->
 <template>
-  <div class="effect-panel">
-    <h3>自动移动的圆锥体</h3>
+  <div class="demo_panel">
+    <h3 class="demo_title">自动移动的圆锥体</h3>
   </div>
 </template>
 
@@ -96,13 +96,3 @@ onUnmounted(() => {
 });
 </script>
 
-<style scoped>
-.effect-panel {
-  position: absolute;
-  top: 10px;
-  left: 10px;
-  background: rgba(255, 255, 255, 0.9);
-  padding: 10px;
-  border-radius: 4px;
-}
-</style>

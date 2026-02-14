@@ -1,8 +1,19 @@
+<!--
+ * @Title: 
+ * @Author: zhangzhiwei
+ * @Date: 2026-02-13 21:18:48
+ * @FilePath: \src\views\elements\svg.vue
+ * @Description: 
+-->
 
 <template>
-  <div class="absolute top-4 left-4 bg-white p-4 rounded shadow z-10">
-    <div class="mb-2 font-bold">SVG 图标示例</div>
-    <el-button size="small" @click="addSvg">添加 SVG</el-button>
+  <div class="demo_panel">
+    <h3 class="demo_title">SVG 图标示例</h3>
+    <div class="button-group">
+      <div class="flex gap-2">
+        <el-button size="small" @click="addSvg">添加 SVG</el-button>
+      </div>
+    </div>
   </div>
 </template>
 

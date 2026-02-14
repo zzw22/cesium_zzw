@@ -1,5 +1,7 @@
 <template>
-  <div class="bg-white h-20"></div>
+  <div class="demo_panel">
+    <h3 class="demo_title">缩放控件</h3>
+  </div>
 </template>
 
 <script setup>
@@ -31,10 +33,10 @@ onMounted(() => {
   if (!viewer) return;
   addInfo();
 });
-useCesiumCleanup(()=>{
-  if(navigationInstance){
+useCesiumCleanup(() => {
+  if (navigationInstance) {
     navigationInstance.destroy();
     navigationInstance = null;
   }
-})
+});
 </script>

@@ -6,7 +6,9 @@
  * @Description: 
 -->
 <template>
-  <div class="panel">实体加载</div>
+  <div class="demo_panel">
+    <h3 class="demo_title">实体加载</h3>
+  </div>
 </template>
 
 <script setup>
@@ -59,11 +61,6 @@ onMounted(() => {
   viewer = useCesiumStore().viewer;
   if (!viewer) return;
   addEntities();
-});
-useCesiumCleanup(() => {
-  if (viewer) {
-    viewer.entities.removeAll();
-  }
 });
 useCesiumCleanup(() => {
   if (viewer) {

@@ -3,8 +3,8 @@
  * @Description: 点击模型显示其属性信息
 -->
 <template>
-  <div class="absolute top-4 left-4 bg-white p-4 rounded shadow z-10">
-    <div class="mb-4 font-bold border-b pb-2">模型交互</div>
+  <div class="demo_panel">
+    <h3 class="demo_title">模型交互</h3>
     <div class="text-xs text-gray-500 mb-2">
       点击场景中的模型查看信息
     </div>

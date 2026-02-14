@@ -1,11 +1,17 @@
 <!--
+ * @Title: 
+ * @Author: zhangzhiwei
+ * @Date: 2026-02-13 21:18:48
+ * @FilePath: \src\views\particleEffect\particleExamples.vue
+ * @Description: 
+-->
+<!--
  * @Title: 粒子系统示例
  * @Description: 演示火焰、烟雾、水枪、爆炸、喷雾等粒子效果
 -->
 <template>
-  <div class="absolute top-4 left-4 bg-white p-4 rounded shadow z-10 w-64">
-    <div class="mb-4 font-bold border-b pb-2">粒子特效</div>
-
+  <div class="demo_panel">
+    <h3 class="demo_title">粒子特效</h3>
     <div class="space-y-2">
       <div
         v-for="effect in effects"

@@ -6,9 +6,10 @@
  * @Description: 
 -->
 <template>
-  <div class="bg-white h-20">
+  <div class="demo_panel">
+    <h3 class="demo_title">相机飞行</h3>
     <div
-      class="flex justify-between items-center bg-white rounded-md p-5 z-99 fixed"
+      class="flex justify-between items-center"
     >
       <el-button class="text-lg font-bold" @click="flyTo" type="primary"
         >相机飞行</el-button

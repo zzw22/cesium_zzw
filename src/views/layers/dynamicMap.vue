@@ -6,25 +6,25 @@
  * @Description: 
 -->
 <template>
-  <div
-    class="absolute top-4 left-4 bg-white p-4 rounded shadow z-10 h-auto w-auto"
-  >
-    <div class="mb-2 font-bold">动态地图示例</div>
-    <div class="flex gap-2">
-      <el-button
-        type="primary"
-        size="small"
-        @click="openTimeMap"
-        :disabled="isPlaying"
-        >开始播放</el-button
-      >
-      <el-button
-        type="danger"
-        size="small"
-        @click="closeTimeMap"
-        :disabled="!isPlaying"
-        >停止播放</el-button
-      >
+  <div class="demo_panel">
+    <h3 class="demo_title">动态地图示例</h3>
+    <div class="button-group">
+      <div class="flex gap-2">
+        <el-button
+          type="primary"
+          size="small"
+          @click="openTimeMap"
+          :disabled="isPlaying"
+          >开始播放</el-button
+        >
+        <el-button
+          type="danger"
+          size="small"
+          @click="closeTimeMap"
+          :disabled="!isPlaying"
+          >停止播放</el-button
+        >
+      </div>
     </div>
     <div class="mt-2 text-sm text-gray-600">
       当前帧: {{ currentIndex + 1 }} / {{ totalFrames }}
@@ -149,4 +149,11 @@ useCesiumCleanup(() => {
 });
 </script>
 
-<style scoped></style>
+<style scoped>
+.button-group {
+  margin-top: 10px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+</style>

@@ -6,8 +6,8 @@
  * @Description: 
 -->
 <template>
-  <div class="effect-panel">
-    <h3>动态扩散点</h3>
+  <div class="demo_panel">
+    <h3 class="demo_title">动态扩散点</h3>
     <el-button @click="toggleEffect">切换显示</el-button>
   </div>
 </template>
@@ -16,7 +16,7 @@
 import { onMounted, onUnmounted } from 'vue';
 import { useCesiumStore } from '@/store/cesiumStore';
 import * as Cesium from 'cesium';
-import { EllipsoidFadeMaterialProperty } from '@/utils/cesium/EllipsoidFadeMaterialProperty';
+import { EllipsoidFadeMaterialProperty } from '@/utils/cesium';
 
 const store = useCesiumStore();
 let entity = null;
@@ -53,14 +53,3 @@ onUnmounted(() => {
   }
 });
 </script>
-
-<style scoped>
-.effect-panel {
-  position: absolute;
-  top: 10px;
-  left: 10px;
-  background: rgba(255, 255, 255, 0.9);
-  padding: 10px;
-  border-radius: 4px;
-}
-</style>

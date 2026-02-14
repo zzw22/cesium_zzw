@@ -6,8 +6,8 @@
  * @Description: 流动线
 -->
 <template>
-  <div class="effect-panel">
-    <h3>流动线</h3>
+  <div class="demo_panel">
+    <h3 class="demo_title">流动线</h3>
     <el-button @click="toggleEffect">{{ isVisible ? '隐藏' : '显示' }}</el-button>
   </div>
 </template>
@@ -197,14 +197,3 @@ onUnmounted(() => {
   clearEntities();
 });
 </script>
-
-<style scoped>
-.effect-panel { 
-  position: absolute;
-  top: 10px;
-  left: 10px;
-  background: rgba(255, 255, 255, 0.9);
-  padding: 10px;
-  border-radius: 4px;
-}
-</style>

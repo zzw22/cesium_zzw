@@ -5,13 +5,9 @@
  * @FilePath: \src\views\models\primitiveMassive.vue
  * @Description: 
 -->
-<!--
- * @Title: Primitive加载大量模型
- * @Description: 使用ModelInstanceCollection加载大量同类模型
--->
 <template>
-  <div class="absolute top-4 left-4 bg-white p-4 rounded shadow z-10">
-    <div class="mb-4 font-bold border-b pb-2">大量模型实例化</div>
+  <div class="demo_panel">
+    <h3 class="demo_title">大量模型实例化</h3>
     <div class="text-xs text-gray-500 mb-2">
       使用 PrimitiveCollection 渲染 1000 个实例（全球分布）
     </div>

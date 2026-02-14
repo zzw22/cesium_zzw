@@ -3,16 +3,18 @@
  * @Description: 演示加载和播放CZML格式的动画数据
 -->
 <template>
-  <div class="absolute top-4 left-4 bg-white p-4 rounded shadow z-10">
-    <div class="mb-4 font-bold border-b pb-2">CZML加载</div>
-    <div class="text-xs text-gray-500 mb-2">演示加载本地CZML文件</div>
-    <div class="flex space-x-2">
-      <el-button size="small" type="primary" @click="resetView"
-        >重置视角</el-button
-      >
-      <el-button size="small" @click="toggleAnimation">{{
-        isAnimating ? "暂停" : "播放"
-      }}</el-button>
+  <div class="demo_panel">
+    <h3 class="demo_title">CZML加载</h3>
+    <div class="button-group">
+      <div class="text-xs text-gray-500 mb-2">演示加载本地CZML文件</div>
+      <div class="flex space-x-2">
+        <el-button size="small" type="primary" @click="resetView"
+          >重置视角</el-button
+        >
+        <el-button size="small" @click="toggleAnimation">{{
+          isAnimating ? "暂停" : "播放"
+        }}</el-button>
+      </div>
     </div>
   </div>
 </template>

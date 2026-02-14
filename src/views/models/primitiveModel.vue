@@ -6,8 +6,8 @@
  * @Description: 
 -->
 <template>
-  <div class="control-panel">
-    <div class="panel-title">加载模型 (Primitive)</div>
+  <div class="demo_panel">
+    <h3 class="demo_title">加载模型 (Primitive)</h3>
     <div class="panel-content">
       <el-button size="small" type="primary" @click="resetView"
         >重置视角</el-button
@@ -82,18 +82,6 @@ useCesiumCleanup(() => {
 </script>
 
 <style scoped>
-.control-panel {
-  position: absolute;
-  top: 16px;
-  left: 16px;
-  background-color: #ffffff;
-  padding: 16px;
-  border-radius: 4px;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
-    0 2px 4px -1px rgba(0, 0, 0, 0.06);
-  z-index: 10;
-}
-
 .panel-title {
   margin-bottom: 16px;
   font-weight: bold;

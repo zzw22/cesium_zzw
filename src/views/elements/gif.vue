@@ -7,9 +7,13 @@
 -->
 
 <template>
-  <div class="absolute top-4 left-4 bg-white p-4 rounded shadow z-10">
-    <div class="mb-2 font-bold">GIF/动画示例</div>
-    <el-button size="small" @click="addAnimatedBillboard">添加动画图标</el-button>
+  <div class="demo_panel">
+    <h3 class="demo_title">GIF/动画示例</h3>
+    <div class="button-group">
+      <div class="flex gap-2">
+        <el-button size="small" @click="addAnimatedBillboard">添加动画图标</el-button>
+      </div>
+    </div>
   </div>
 </template>
 

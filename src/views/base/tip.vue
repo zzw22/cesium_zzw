@@ -6,7 +6,8 @@
  * @Description: 
 -->
 <template>
-  <div class="tip-container">
+  <div class="demo_panel">
+    <h3 class="demo_title">提示信息</h3>
     <div
       ref="tipRef"
       class="tip-box"
@@ -71,12 +72,7 @@ useCesiumCleanup(() => {
 </script>
 
 <style scoped>
-.tip-container {
-  position: relative;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-}
+
 
 .tip-box {
   position: absolute;

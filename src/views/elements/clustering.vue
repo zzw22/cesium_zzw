@@ -1,16 +1,21 @@
 <!--
- * @Title: 实体聚集示例
- * @Description: 演示海量点数据的聚合效果
+ * @Title: 
+ * @Author: zhangzhiwei
+ * @Date: 2026-02-13 21:18:48
+ * @FilePath: \src\views\elements\clustering.vue
+ * @Description: 
 -->
 <template>
-  <div class="absolute top-4 left-4 bg-white p-4 rounded shadow z-10">
-    <div class="mb-4 font-bold border-b pb-2">实体聚集</div>
-    <div class="flex items-center space-x-2">
-      <span class="text-sm">启用聚集</span>
-      <el-switch v-model="clusteringEnabled" @change="toggleClustering" />
-    </div>
-    <div class="mt-2 text-xs text-gray-500">
-      当前点数量: {{ pointCount }}
+  <div class="demo_panel">
+    <div class="demo_title">实体聚集</div>
+    <div class="button-group">
+      <div class="flex items-center space-x-2">
+        <span class="text-sm">启用聚集</span>
+        <el-switch v-model="clusteringEnabled" @change="toggleClustering" />
+      </div>
+      <div class="mt-2 text-xs text-gray-500">
+        当前点数量: {{ pointCount }}
+      </div>
     </div>
   </div>
 </template>

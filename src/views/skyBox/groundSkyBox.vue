@@ -6,10 +6,8 @@
  * @Description: 
 -->
 <template>
-  <div class="bg-white h-20">
-    <div class="flex items-center justify-between h-full px-4">
-      <div class="text-lg font-bold">背景图</div>
-    </div>
+  <div class="demo_panel">
+      <h3 class="demo_title">背景图</h3>
   </div>
 </template>
 

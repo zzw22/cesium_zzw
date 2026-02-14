@@ -1,10 +1,10 @@
 <!--
  * @Title: Entity 交互事件
- * @Description: 演示点击和悬停拾取 Entity
+ * @Description: 演示点击和悬停拾取 Entity 实体
 -->
 <template>
-  <div class="absolute top-4 left-4 bg-white p-4 rounded shadow z-10">
-    <div class="mb-2 font-bold">交互事件示例</div>
+  <div class="demo_panel">
+    <h3 class="demo_title">交互事件示例</h3>
     <div class="text-sm mb-2">尝试点击或悬停在红色球体上</div>
     <div v-if="message" class="text-red-500 font-bold">{{ message }}</div>
   </div>

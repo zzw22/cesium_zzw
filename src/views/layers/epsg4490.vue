@@ -5,7 +5,11 @@
  * @FilePath: \src\views\layers\epsg4490.vue
  * @Description: 
 -->
-<template></template>
+<template>
+  <div class="demo_panel">
+    <h3 class="demo_title">EPSG:4490 投影示例</h3>
+  </div>
+</template>
 
 <script setup>
 import { onMounted, shallowRef } from 'vue'

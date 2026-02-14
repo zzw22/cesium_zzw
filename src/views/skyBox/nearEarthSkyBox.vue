@@ -6,10 +6,8 @@
  * @Description: 近地天空盒
 -->
 <template>
-  <div class="bg-white h-20">
-    <div class="flex items-center justify-between h-full px-4">
-      <div class="text-lg font-bold">近地天空盒</div>
-    </div>
+  <div class="demo_panel">
+      <h3 class="demo_title">近地天空盒</h3>
   </div>
 </template>
 

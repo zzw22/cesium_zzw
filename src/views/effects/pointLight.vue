@@ -1,6 +1,6 @@
 <template>
-  <div class="effect-panel">
-    <h3>点光源效果</h3>
+  <div class="demo_panel">
+    <h3 class="demo_title">点光源效果</h3>
     <div class="control-group">
       <label>光照强度:</label>
       <input
@@ -329,24 +329,6 @@ watch([lightIntensity, lightHeight], () => {
 </script>
 
 <style scoped>
-.effect-panel {
-  position: absolute;
-  top: 10px;
-  left: 10px;
-  background: white;
-  color: black;
-  padding: 15px;
-  border-radius: 8px;
-  width: 250px;
-}
-
-h3 {
-  margin-top: 0;
-  margin-bottom: 15px;
-  font-size: 16px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
-  padding-bottom: 5px;
-}
 
 .control-group {
   margin-bottom: 15px;

@@ -6,30 +6,22 @@
  * @Description: 
 -->
 <template>
-  <div
-    class="bg-white/90 p-4 rounded-lg shadow-lg absolute top-4 left-4 h-auto w-80 pointer-events-auto"
-  >
-    <div class="flex flex-col gap-4">
-      <div class="text-lg font-bold text-gray-800 border-b pb-2">
-        地表透明度控制
-      </div>
-
-      <div class="flex items-center gap-4">
-        <span class="text-sm text-gray-600 w-16">透明度:</span>
-        <el-slider
-          v-model="opacity"
-          :min="0"
-          :max="1"
-          :step="0.1"
-          @input="updateOpacity"
-          class="flex-1"
-        />
-        <span class="text-sm text-gray-600 w-8">{{ opacity }}</span>
-      </div>
-
-      <div class="text-xs text-gray-500 bg-gray-100 p-2 rounded">
-        提示：调整滑块可改变地表（Globe）的透明度，从而看到地下物体。
-      </div>
+  <div class="demo_panel">
+    <h3 class="demo_title">地表透明度控制</h3>
+    <div class="flex items-center gap-4">
+      <span class="text-sm text-gray-600 w-16">透明度:</span>
+      <el-slider
+        v-model="opacity"
+        :min="0"
+        :max="1"
+        :step="0.1"
+        @input="updateOpacity"
+        class="flex-1"
+      />
+      <span class="text-sm text-gray-600 w-8">{{ opacity }}</span>
+    </div>
+    <div class="text-xs text-gray-500 bg-gray-100 p-2 rounded">
+      提示：调整滑块可改变地表（Globe）的透明度，从而看到地下物体。
     </div>
   </div>
 </template>

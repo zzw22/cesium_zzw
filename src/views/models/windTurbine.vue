@@ -3,8 +3,8 @@
  * @Description: 加载并播放风力发电机模型动画
 -->
 <template>
-  <div class="absolute top-4 left-4 bg-white p-4 rounded shadow z-10">
-    <div class="mb-4 font-bold border-b pb-2">风力发电机</div>
+  <div class="demo_panel">
+    <h3 class="demo_title">风力发电机</h3>
     <div class="text-xs text-gray-500 mb-2">
       展示带动画的风机模型
     </div>

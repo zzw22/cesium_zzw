@@ -1,6 +1,6 @@
 <template>
-  <div class="absolute top-4 left-4 bg-white p-4 rounded shadow z-10">
-    <div class="mb-4 font-bold border-b pb-2">3D Tiles 贴图叠加</div>
+  <div class="demo_panel">
+    <h3 class="demo_title">3D Tiles 贴图叠加</h3>
     <div class="text-xs text-gray-500 mb-2">CustomShader 效果演示</div>
     <div class="space-y-2">
         <button @click="applyGradientShader" class="texture-btn texture-btn--blue">纯渐变色</button>

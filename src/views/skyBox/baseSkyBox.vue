@@ -6,10 +6,8 @@
  * @Description: 基础天空盒
 -->
 <template>
-  <div class="bg-white h-20">
-    <div class="flex items-center justify-between h-full px-4">
-      <div class="text-lg font-bold">基础天空盒</div>
-    </div>
+  <div class="demo_panel">
+      <div class="demo_title">基础天空盒</div>
   </div>
 </template>
 

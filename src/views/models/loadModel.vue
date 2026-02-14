@@ -6,8 +6,8 @@
  * @Description: 
 -->
 <template>
-  <div class="absolute top-4 left-4 bg-white p-4 rounded shadow z-10">
-    <div class="mb-4 font-bold border-b pb-2">加载模型 (Entity)</div>
+  <div class="demo_panel">
+    <h3 class="demo_title">加载模型 (Entity)</h3>
     <div class="text-xs text-gray-500 mb-2"></div>
     <div class="flex space-x-2">
       <el-button size="small" type="primary" @click="resetView"

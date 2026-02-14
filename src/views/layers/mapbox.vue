@@ -7,7 +7,6 @@
 <template>
   <div class="demo_panel">
     <h3 class="demo_title">Mapbox 卫星地图</h3>
-    <p class="text-sm text-gray-500">请在 config.js 中配置密钥</p>
   </div>
 </template>
 

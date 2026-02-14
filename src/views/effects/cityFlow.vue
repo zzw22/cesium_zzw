@@ -1,6 +1,6 @@
 <template>
-  <div class="control-panel">
-    <h3>城市流向图</h3>
+  <div class="demo_panel">
+    <h3 class="demo_title">城市流向图</h3>
     <div class="info">
       <p>展示城市间的流向连接线效果</p>
     </div>
@@ -11,8 +11,8 @@
 import { onMounted, onUnmounted } from 'vue';
 import * as Cesium from 'cesium';
 import { useCesiumStore } from '@/store/cesiumStore';
-import { PolylineTrailMaterialProperty } from '@/utils/cesium/PolylineTrailMaterialProperty';
-import { CircleWaveMaterialProperty } from '@/utils/cesium/CircleWaveMaterialProperty';
+import { PolylineTrailMaterialProperty } from '@/utils/cesium';
+import { CircleWaveMaterialProperty } from '@/utils/cesium';
 
 let viewer = null;
 const createdEntities = [];
@@ -138,16 +138,6 @@ onUnmounted(() => {
 </script>
 
 <style scoped>
-.control-panel {
-  position: absolute;
-  top: 20px;
-  left: 20px;
-  background: white;
-  padding: 15px;
-  border-radius: 8px;
-  color: black;
-  z-index: 100;
-}
 
 .info {
   margin-top: 10px;

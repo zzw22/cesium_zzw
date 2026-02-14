@@ -6,7 +6,9 @@
  * @Description: 
 -->
 <template>
-  <div class="bg-white h-20"></div>
+  <div class="demo_panel">
+    <h3 class="demo_title">运动模拟</h3>
+  </div>
 </template>
 
 <script setup>

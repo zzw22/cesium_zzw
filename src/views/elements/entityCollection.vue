@@ -3,12 +3,14 @@
  * @Description: 使用 CustomDataSource 管理一组 Entity
 -->
 <template>
-  <div class="absolute top-4 left-4 bg-white p-4 rounded shadow z-10">
-    <div class="mb-2 font-bold">EntityCollection 示例</div>
-    <div class="flex gap-2">
-      <el-button size="small" @click="addCollection">添加集合</el-button>
-      <el-button size="small" @click="toggleShow">显示/隐藏</el-button>
-      <el-button size="small" type="danger" @click="clear">清除</el-button>
+  <div class="demo_panel">
+    <h3 class="demo_title">EntityCollection 示例</h3>
+    <div class="button-group">
+      <div class="flex gap-2">
+        <el-button size="small" @click="addCollection">添加集合</el-button>
+        <el-button size="small" @click="toggleShow">显示/隐藏</el-button>
+        <el-button size="small" type="danger" @click="clear">清除</el-button>
+      </div>
     </div>
   </div>
 </template>

@@ -1,6 +1,6 @@
 <template>
-  <div class="position-panel">
-    <h3>坐标信息</h3>
+  <div class="demo_panel">
+    <h3 class="demo_title">坐标信息</h3>
     <div class="position-info">
       <div class="position-item">
         <label>屏幕坐标:</label>
@@ -169,26 +169,6 @@ useCesiumCleanup(() => {
 </script>
 
 <style scoped>
-.position-panel {
-  position: absolute;
-  top: 10px;
-  left: 10px;
-  background-color: rgba(255, 255, 255, 1);
-  padding: 15px;
-  border-radius: 5px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-  width: 350px;
-  max-height: 400px;
-  overflow-y: auto;
-}
-
-h3 {
-  margin-top: 0;
-  margin-bottom: 15px;
-  font-size: 16px;
-  border-bottom: 1px solid #eee;
-  padding-bottom: 5px;
-}
 
 .position-info {
   display: flex;

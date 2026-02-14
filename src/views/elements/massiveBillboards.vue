@@ -6,11 +6,13 @@
  * @Description: 
 -->
 <template>
-  <div class="absolute top-4 left-4 bg-white p-4 rounded shadow z-10">
-    <div class="mb-2 font-bold">海量点示例 (10000个)</div>
-    <div class="flex gap-2">
-      <el-button size="small" @click="addMassive">生成点数据</el-button>
-      <el-button size="small" type="danger" @click="clear">清除</el-button>
+  <div class="demo_panel">
+    <h3 class="demo_title">海量点示例 (10000个)</h3>
+    <div class="button-group">
+      <div class="flex gap-2">
+        <el-button size="small" @click="addMassive">生成点数据</el-button>
+        <el-button size="small" type="danger" @click="clear">清除</el-button>
+      </div>
     </div>
   </div>
 </template>

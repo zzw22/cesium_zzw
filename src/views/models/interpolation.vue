@@ -3,8 +3,8 @@
  * @Description: 使用SampledPositionProperty实现模型平滑移动
 -->
 <template>
-  <div class="absolute top-4 left-4 bg-white p-4 rounded shadow z-10">
-    <div class="mb-4 font-bold border-b pb-2">模型差值运动</div>
+  <div class="demo_panel">
+    <h3 class="demo_title">模型差值运动</h3>
     <div class="text-xs text-gray-500 mb-2">
       基于时间样本的位置插值
     </div>

@@ -1,6 +1,6 @@
 <template>
-  <div class="analysis-panel">
-    <div class="panel-header">测量工具</div>
+  <div class="demo_panel">
+    <h3 class="demo_title">测量工具</h3>
     <div class="panel-content">
       <div class="mb-2">
         <el-radio-group v-model="mapType" size="small" @change="handleMapTypeChange">
@@ -345,22 +345,6 @@ const azimuth = (p1, p2) => {
 </script>
 
 <style scoped>
-.analysis-panel {
-  position: absolute;
-  top: 10px;
-  left: 10px;
-  background: white;
-  padding: 10px;
-  border-radius: 4px;
-  z-index: 100;
-  box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
-}
-.panel-header {
-  font-weight: bold;
-  margin-bottom: 10px;
-  border-bottom: 1px solid #eee;
-  padding-bottom: 5px;
-}
 .mb-2 {
   margin-bottom: 8px;
   font-size: 12px;

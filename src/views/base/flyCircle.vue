@@ -1,10 +1,7 @@
 <template>
-  <div class="bg-white/90 p-4 rounded-lg shadow-lg absolute top-4 left-4 h-auto w-80 pointer-events-auto">
+  <div class="demo_panel">
+    <h3 class="demo_title">绕点飞行</h3>
     <div class="flex flex-col gap-4">
-      <div class="text-lg font-bold text-gray-800 border-b pb-2">
-        绕点飞行
-      </div>
-      
       <div class="flex flex-col gap-3">
         <div class="flex gap-2">
           <el-button type="primary" size="small" @click="pickCenter" :disabled="isRotating" class="flex-1">
@@ -124,35 +121,16 @@ const toggleRotate = () => {
 const startRotate = () => {
   if (!viewer || !centerPoint) return;
   
-  // 1. 锁定相机到中心点
-  // 计算当前相机位置到中心点的距离（保持距离不变）
   const distance = Cesium.Cartesian3.distance(viewer.camera.positionWC, centerPoint);
   
-  // 设置相机看向中心点
-  // 使用 lookAt 锁定参考系
-  // 注意：lookAt 会改变相机的参考系，使得 (0,0,0) 变成 centerPoint
-  // 第一个参数是目标点，第二个参数是偏移量（相机在局部坐标系中的位置）
-  
-  // 我们需要先将相机飞到合适的位置或者直接锁定当前视角
-  // 这里选择保持当前视角的相对位置，但锁定焦点
-  
   try {
-    const transform = Cesium.Transforms.eastNorthUpToFixedFrame(centerPoint);
-    
-    // 将相机当前位置转换为局部坐标
-    // 这步比较复杂，简单的方法是让相机直接看向中心，并保持当前距离
-    // 或者直接使用 camera.lookAt
-    
-    // 获取当前相机的位置、方向等
     const heading = viewer.camera.heading;
     const pitch = viewer.camera.pitch;
     const range = distance;
     
     viewer.camera.lookAt(centerPoint, new Cesium.HeadingPitchRange(heading, pitch, range));
     
-    // 禁用默认的鼠标操作，防止冲突（可选，但 lookAt 模式下通常自带交互）
     viewer.scene.screenSpaceCameraController.enableLook = false; // 旋转
-    // viewer.scene.screenSpaceCameraController.enableRotate = false; // 拖拽旋转 - 实际上 lookAt 模式下这个是用来绕点旋转的，应该保留
     
     isRotating.value = true;
     message.value = '正在旋转中...';
